@@ -18,7 +18,8 @@ class JSONCompressor {
             outputStats: 'outputStats',
             compressionRatio: 'compressionRatio',
             notification: 'notification',
-            languageSelect: 'languageSelect',
+            languageToggle: 'languageToggle',
+            languageMenu: 'languageMenu',
             themeToggle: 'themeToggle',
             themeIcon: 'themeIcon',
             // Compare mode elements
@@ -41,7 +42,7 @@ class JSONCompressor {
         
         // Check if all critical elements exist
         const criticalElements = [
-            'inputTextarea', 'outputTextarea', 'languageSelect', 
+            'inputTextarea', 'outputTextarea', 'languageToggle', 
             'themeToggle', 'notification'
         ];
         
@@ -210,10 +211,30 @@ class JSONCompressor {
             this.jsonBTextarea.addEventListener('scroll', () => this.syncScroll(this.jsonBTextarea, this.jsonBLineNumbers));
         }
         
-        // Language selector and theme toggle
-        if (this.languageSelect) {
-            this.languageSelect.addEventListener('change', (e) => this.changeLanguage(e.target.value));
-            console.log('Language selector listener added');
+        // Language picker and theme toggle
+        if (this.languageToggle && this.languageMenu) {
+            this.languageToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.languageMenu.classList.toggle('active');
+            });
+            
+            // Close language menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (this.languageMenu && !e.target.closest('.language-picker')) {
+                    this.languageMenu.classList.remove('active');
+                }
+            });
+            
+            // Language option buttons
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const lang = option.getAttribute('data-lang');
+                    this.changeLanguage(lang);
+                    this.languageMenu.classList.remove('active');
+                });
+            });
+            
+            console.log('Language picker listeners added');
         }
         
         if (this.themeToggle) {
@@ -289,7 +310,15 @@ class JSONCompressor {
         }
 
         this.currentLanguage = languageCode;
-        this.languageSelect.value = languageCode;
+        
+        // Update active language option in menu
+        document.querySelectorAll('.language-option').forEach(option => {
+            if (option.getAttribute('data-lang') === languageCode) {
+                option.classList.add('active');
+            } else {
+                option.classList.remove('active');
+            }
+        });
 
         const langData = this.translations[languageCode];
         const t = langData.translations;

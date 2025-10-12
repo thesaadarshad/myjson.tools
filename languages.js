@@ -17,7 +17,7 @@ const translations = {
             modeCompare: "Compare",
             
             // Input Panel
-            inputTitle: "Input JSON",
+            inputTitle: "Source",
             inputPlaceholder: "Paste your JSON here...",
             
             // Compare Mode
@@ -35,7 +35,7 @@ const translations = {
             sample: "Sample",
             
             // Output Panel
-            outputTitle: "Output JSON",
+            outputTitle: "Result",
             outputPlaceholder: "Output will appear here...",
             copyToInput: "Copy to Input",
             copy: "Copy",
@@ -136,7 +136,7 @@ const translations = {
             sampleLoaded: "Sample JSON loaded",
             
             // Footer
-            footer: "Built with precision • Following golden ratio principles",
+            footer: "Built with precision • Open Source • Privacy First",
             
             // Tooltips
             tooltipClearInput: "Clear input",
@@ -183,7 +183,7 @@ const translations = {
             modeTransform: "Transformar",
             modeCompare: "Comparar",
             
-            inputTitle: "JSON de Entrada",
+            inputTitle: "Fuente",
             inputPlaceholder: "Pega tu JSON aquí...",
             
             jsonA: "JSON A (Original)",
@@ -199,7 +199,7 @@ const translations = {
             paste: "Pegar",
             sample: "Ejemplo",
             
-            outputTitle: "JSON de Salida",
+            outputTitle: "Resultado",
             outputPlaceholder: "La salida aparecerá aquí...",
             copyToInput: "Copiar a Entrada",
             copy: "Copiar",
@@ -293,7 +293,7 @@ const translations = {
             fileDownloaded: "Archivo descargado",
             sampleLoaded: "JSON de ejemplo cargado",
             
-            footer: "Construido con precisión • Siguiendo principios de proporción áurea",
+            footer: "Construido con precisión • Código Abierto • Privacidad Primero",
             
             tooltipClearInput: "Limpiar entrada",
             tooltipPaste: "Pegar desde portapapeles",
@@ -339,7 +339,7 @@ const translations = {
             modeTransform: "تحويل",
             modeCompare: "مقارنة",
             
-            inputTitle: "JSON الإدخال",
+            inputTitle: "المصدر",
             inputPlaceholder: "الصق JSON هنا...",
             
             jsonA: "JSON A (الأصلي)",
@@ -355,7 +355,7 @@ const translations = {
             paste: "لصق",
             sample: "مثال",
             
-            outputTitle: "JSON الإخراج",
+            outputTitle: "النتيجة",
             outputPlaceholder: "سيظهر الإخراج هنا...",
             copyToInput: "نسخ إلى الإدخال",
             copy: "نسخ",
@@ -449,7 +449,7 @@ const translations = {
             fileDownloaded: "تم تحميل الملف",
             sampleLoaded: "تم تحميل مثال JSON",
             
-            footer: "بُني بدقة • باتباع مبادئ النسبة الذهبية",
+            footer: "بُني بدقة • مفتوح المصدر • الخصوصية أولاً",
             
             tooltipClearInput: "مسح الإدخال",
             tooltipPaste: "لصق من الحافظة",
@@ -495,7 +495,7 @@ const translations = {
             modeTransform: "Transformer",
             modeCompare: "Comparer",
             
-            inputTitle: "JSON d'Entrée",
+            inputTitle: "Source",
             inputPlaceholder: "Collez votre JSON ici...",
             
             jsonA: "JSON A (Original)",
@@ -511,7 +511,7 @@ const translations = {
             paste: "Coller",
             sample: "Exemple",
             
-            outputTitle: "JSON de Sortie",
+            outputTitle: "Résultat",
             outputPlaceholder: "La sortie apparaîtra ici...",
             copyToInput: "Copier vers l'Entrée",
             copy: "Copier",
@@ -605,7 +605,7 @@ const translations = {
             fileDownloaded: "Fichier téléchargé",
             sampleLoaded: "Exemple JSON chargé",
             
-            footer: "Construit avec précision • Suivant les principes du nombre d'or",
+            footer: "Construit avec précision • Open Source • Confidentialité d'abord",
             
             tooltipClearInput: "Effacer l'entrée",
             tooltipPaste: "Coller depuis le presse-papiers",
@@ -651,7 +651,7 @@ const translations = {
             modeTransform: "Transformieren",
             modeCompare: "Vergleichen",
             
-            inputTitle: "Eingabe-JSON",
+            inputTitle: "Quelle",
             inputPlaceholder: "JSON hier einfügen...",
             
             jsonA: "JSON A (Original)",
@@ -667,7 +667,7 @@ const translations = {
             paste: "Einfügen",
             sample: "Beispiel",
             
-            outputTitle: "Ausgabe-JSON",
+            outputTitle: "Ergebnis",
             outputPlaceholder: "Die Ausgabe erscheint hier...",
             copyToInput: "Zur Eingabe Kopieren",
             copy: "Kopieren",
@@ -761,7 +761,7 @@ const translations = {
             fileDownloaded: "Datei heruntergeladen",
             sampleLoaded: "Beispiel-JSON geladen",
             
-            footer: "Mit Präzision gebaut • Nach dem Goldenen Schnitt",
+            footer: "Mit Präzision gebaut • Open Source • Datenschutz zuerst",
             
             tooltipClearInput: "Eingabe löschen",
             tooltipPaste: "Aus Zwischenablage einfügen",
