@@ -5,10 +5,7 @@
 
 class JSONCompressor {
     constructor() {
-        console.log('JSONCompressor constructor called');
-        console.log('Document ready state:', document.readyState);
-        
-        // Get all DOM elements with debugging
+        // Get all DOM elements
         const elements = {
             inputTextarea: 'inputJson',
             outputTextarea: 'outputJson',
@@ -31,14 +28,9 @@ class JSONCompressor {
             diffResult: 'diffResult'
         };
         
-        // Try to get each element and log results
+        // Get all DOM elements
         for (const [key, id] of Object.entries(elements)) {
             this[key] = document.getElementById(id);
-            if (!this[key]) {
-                console.error(`Element not found: ${id}`);
-            } else {
-                console.log(`Element found: ${id}`);
-            }
         }
         
         // Check if all critical elements exist
@@ -50,12 +42,8 @@ class JSONCompressor {
         const missingElements = criticalElements.filter(key => !this[key]);
         
         if (missingElements.length > 0) {
-            console.error('Missing critical DOM elements:', missingElements);
-            console.error('Cannot initialize application');
             return;
         }
-        
-        console.log('All critical elements found, initializing...');
         
         // Initialize i18n
         this.currentLanguage = localStorage.getItem('json-compressor-language') || 'en';
@@ -84,9 +72,8 @@ class JSONCompressor {
             this.updateStats();
             this.updateLineNumbers();
             this.initializePWA();
-            console.log('JSONCompressor initialized successfully');
         } catch (error) {
-            console.error('Error during initialization:', error);
+            // Initialization error
         }
     }
 
@@ -102,7 +89,6 @@ class JSONCompressor {
             e.preventDefault();
             // Store the event for later use
             deferredPrompt = e;
-            console.log('💡 PWA install prompt available');
             
             // Optional: Show custom install button (can be added to UI later)
             // For now, just log that it's available
@@ -111,29 +97,18 @@ class JSONCompressor {
         
         // Listen for app installed event
         window.addEventListener('appinstalled', () => {
-            console.log('✅ PWA installed successfully');
             deferredPrompt = null;
             // Show success notification
             this.showNotification('App installed successfully! You can now use MyJSON Tools offline.', 'success');
         });
-        
-        // Detect if running as installed PWA
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-            console.log('🚀 Running as installed PWA');
-        }
     }
 
     initializeEventListeners() {
-        console.log('Initializing event listeners...');
-        
         // Helper function to safely add event listener
         const addListener = (id, event, handler) => {
             const element = document.getElementById(id);
             if (element) {
                 element.addEventListener(event, handler);
-                console.log(`Listener added for: ${id}`);
-            } else {
-                console.error(`Cannot add listener - element not found: ${id}`);
             }
         };
         
@@ -239,18 +214,14 @@ class JSONCompressor {
                     this.languageMenu.classList.remove('active');
                 });
             });
-            
-            console.log('Language picker listeners added');
         }
         
         if (this.fontSizeToggle) {
             this.fontSizeToggle.addEventListener('click', () => this.toggleFontSize());
-            console.log('Font size toggle listener added');
         }
         
         if (this.themeToggle) {
             this.themeToggle.addEventListener('click', () => this.toggleTheme());
-            console.log('Theme toggle listener added');
         }
         
         // URL Import Modal
@@ -294,9 +265,6 @@ class JSONCompressor {
         
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
-        console.log('Keyboard shortcuts listener added');
-        
-        console.log('All event listeners initialized');
     }
 
     /**
@@ -394,7 +362,6 @@ class JSONCompressor {
      */
     setLanguage(languageCode) {
         if (!this.translations[languageCode]) {
-            console.warn(`Language ${languageCode} not found, defaulting to English`);
             languageCode = 'en';
         }
 
@@ -482,7 +449,6 @@ class JSONCompressor {
             this.showNotification(this.t('compressSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
-            console.error('Compression error:', error);
         }
     }
 
@@ -510,7 +476,6 @@ class JSONCompressor {
             this.showNotification(this.t('beautifySuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
-            console.error('Beautify error:', error);
         }
     }
 
@@ -541,7 +506,6 @@ class JSONCompressor {
             this.showNotification(this.t('sortSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
-            console.error('Sort error:', error);
         }
     }
 
@@ -588,7 +552,6 @@ class JSONCompressor {
             this.showNotification(this.t('yamlSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
-            console.error('YAML conversion error:', error);
         }
     }
 
@@ -726,7 +689,6 @@ class JSONCompressor {
             this.showNotification(this.t('xmlSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
-            console.error('XML conversion error:', error);
         }
     }
 
@@ -840,7 +802,6 @@ class JSONCompressor {
             this.showNotification(this.t('csvSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
-            console.error('CSV conversion error:', error);
         }
     }
 
@@ -957,7 +918,6 @@ class JSONCompressor {
             this.updateLineNumbers();
         } catch (error) {
             this.showNotification(`${this.t('conversionError')}: ${error.message}`, 'error');
-            console.error('Query params conversion error:', error);
         }
     }
 
@@ -1141,7 +1101,6 @@ class JSONCompressor {
             this.showNotification(this.t('flattenSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
-            console.error('Flatten error:', error);
         }
     }
 
@@ -1207,7 +1166,6 @@ class JSONCompressor {
             this.showNotification(this.t('unflattenSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
-            console.error('Unflatten error:', error);
         }
     }
 
@@ -1268,7 +1226,6 @@ class JSONCompressor {
             this.showNotification(this.t('escapeSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('escapeError')}: ${error.message}`, 'error');
-            console.error('Escape error:', error);
         }
     }
 
@@ -1293,7 +1250,6 @@ class JSONCompressor {
             this.showNotification(this.t('unescapeSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('unescapeError')}: ${error.message}`, 'error');
-            console.error('Unescape error:', error);
         }
     }
 
@@ -1318,7 +1274,6 @@ class JSONCompressor {
             this.showNotification(this.t('base64EncodeSuccess'), 'success');
         } catch (error) {
             this.showNotification(`Encode error: ${error.message}`, 'error');
-            console.error('Base64 encode error:', error);
         }
     }
 
@@ -1343,7 +1298,6 @@ class JSONCompressor {
             this.showNotification(this.t('base64DecodeSuccess'), 'success');
         } catch (error) {
             this.showNotification(this.t('invalidBase64'), 'error');
-            console.error('Base64 decode error:', error);
         }
     }
 
@@ -1371,7 +1325,6 @@ class JSONCompressor {
             this.showNotification(this.t('typescriptSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
-            console.error('TypeScript conversion error:', error);
         }
     }
 
@@ -1542,7 +1495,6 @@ class JSONCompressor {
             this.showNotification(this.t('decompressSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
-            console.error('Decompression error:', error);
         }
     }
 
@@ -2174,8 +2126,7 @@ class JSONCompressor {
             // Check content type
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
-                // Try to parse anyway, but warn user
-                console.warn('Response is not JSON content-type:', contentType);
+                // Try to parse anyway
             }
             
             // Parse response
@@ -2193,8 +2144,6 @@ class JSONCompressor {
             this.showNotification(this.t('importedFromUrl'), 'success');
             
         } catch (error) {
-            console.error('Error importing from URL:', error);
-            
             // Determine error type and show appropriate message
             let errorMessage = this.t('importError');
             
@@ -2871,29 +2820,20 @@ class JSONCompressor {
 }
 
 // Initialize the application when DOM is fully ready
-console.log('App.js loaded, document ready state:', document.readyState);
-
 function initApp() {
-    console.log('initApp called, ready state:', document.readyState);
-    console.log('Body children count:', document.body ? document.body.children.length : 'no body');
-    
-    // Wait a bit longer to ensure all elements are rendered
+    // Wait a bit to ensure all elements are rendered
     setTimeout(() => {
-        console.log('Creating JSONCompressor instance...');
         try {
             window.jsonCompressor = new JSONCompressor();
-            console.log('JSONCompressor instance created successfully');
         } catch (error) {
-            console.error('Failed to create JSONCompressor:', error);
+            // Initialization failed
         }
     }, 250);
 }
 
 if (document.readyState === 'loading') {
-    console.log('Document still loading, waiting for DOMContentLoaded...');
     document.addEventListener('DOMContentLoaded', initApp);
 } else {
-    console.log('Document already loaded, initializing immediately...');
     initApp();
 }
 
