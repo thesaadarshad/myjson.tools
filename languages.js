@@ -10,7 +10,7 @@ const translations = {
         translations: {
             // Header
             title: "MyJSON Tools",
-            subtitle: "Your personal JSON toolkit",
+            subtitle: "Because life's too short for bad JSON tools",
             
             // Modes
             modeTransform: "Transform",
@@ -202,7 +202,7 @@ const translations = {
         dir: "ltr",
         translations: {
             title: "MyJSON Tools",
-            subtitle: "Tu kit de herramientas JSON personal",
+            subtitle: "Porque la vida es demasiado corta para malas herramientas JSON",
             
             modeTransform: "Transformar",
             modeCompare: "Comparar",
@@ -382,7 +382,7 @@ const translations = {
         dir: "rtl",
         translations: {
             title: "MyJSON Tools",
-            subtitle: "أدوات JSON الشخصية الخاصة بك",
+            subtitle: "لأن الحياة أقصر من أن تضيعها في أدوات JSON سيئة",
             
             modeTransform: "تحويل",
             modeCompare: "مقارنة",
@@ -562,7 +562,7 @@ const translations = {
         dir: "ltr",
         translations: {
             title: "MyJSON Tools",
-            subtitle: "Votre boîte à outils JSON personnelle",
+            subtitle: "Parce que la vie est trop courte pour de mauvais outils JSON",
             
             modeTransform: "Transformer",
             modeCompare: "Comparer",
@@ -742,7 +742,7 @@ const translations = {
         dir: "ltr",
         translations: {
             title: "MyJSON Tools",
-            subtitle: "Ihr persönliches JSON-Werkzeugset",
+            subtitle: "Weil das Leben zu kurz für schlechte JSON-Tools ist",
             
             modeTransform: "Transformieren",
             modeCompare: "Vergleichen",
