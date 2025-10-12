@@ -53,7 +53,7 @@ class JSONCompressor {
         this.currentTheme = localStorage.getItem('json-compressor-theme') || 'light';
         
         // Initialize font size
-        this.currentFontSize = localStorage.getItem('json-compressor-font-size') || 'medium';
+        this.currentFontSize = localStorage.getItem('json-compressor-font-size') || 'small';
         
         // Initialize mode
         this.currentMode = localStorage.getItem('json-compressor-mode') || 'transform';
