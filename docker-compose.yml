@@ -1,0 +1,10 @@
+services:
+  json-playground:
+    build: .
+    container_name: json-playground
+    ports:
+      - "8090:80"
+    restart: unless-stopped
+    labels:
+      - "description=JSON Playground Web Application"
+

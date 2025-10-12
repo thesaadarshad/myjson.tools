@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Playground</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body dir="ltr">
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="title-section">
+                    <h1 data-i18n="title">JSON Playground</h1>
+                    <p class="subtitle" data-i18n="subtitle">Transform, format, and convert JSON with ease</p>
+                </div>
+                <div class="language-selector">
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                        <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                    <select id="languageSelect" class="language-dropdown" aria-label="Select language">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="ar">العربية</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="panels">
+                <div class="panel input-panel">
+                    <div class="panel-header">
+                        <h2 data-i18n="inputTitle">Input JSON</h2>
+                        <div class="actions">
+                            <button id="clearInput" class="btn-secondary" data-i18n="clearInput" data-i18n-title="tooltipClearInput">Clear</button>
+                            <button id="pasteBtn" class="btn-secondary" data-i18n="paste" data-i18n-title="tooltipPaste">Paste</button>
+                            <button id="loadSample" class="btn-secondary" data-i18n="sample" data-i18n-title="tooltipSample">Sample</button>
+                        </div>
+                    </div>
+                    <div class="textarea-wrapper">
+                        <div id="inputLineNumbers" class="line-numbers"></div>
+                        <textarea 
+                            id="inputJson" 
+                            class="json-textarea" 
+                            data-i18n-placeholder="inputPlaceholder"
+                            placeholder="Paste your JSON here..."
+                            spellcheck="false"
+                        ></textarea>
+                    </div>
+                    <div class="panel-footer">
+                        <span id="inputStats" class="stats"></span>
+                    </div>
+                </div>
+
+                <div class="control-center">
+                    <button id="compressBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipCompress">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                            <circle cx="12" cy="12" r="1" fill="currentColor"></circle>
+                        </svg>
+                        <span class="btn-label" data-i18n="compress">Compress</span>
+                    </button>
+                    <button id="beautifyBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipBeautify">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                        <span class="btn-label" data-i18n="beautify">Beautify</span>
+                    </button>
+                    <button id="sortBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipSort">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="9" x2="20" y2="9"></line>
+                            <line x1="4" y1="15" x2="20" y2="15"></line>
+                            <line x1="10" y1="3" x2="8" y2="21"></line>
+                            <line x1="16" y1="3" x2="14" y2="21"></line>
+                        </svg>
+                        <span class="btn-label" data-i18n="sort">Sort</span>
+                    </button>
+                    <button id="yamlBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipYaml">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                        <span class="btn-label" data-i18n="yaml">YAML</span>
+                    </button>
+                </div>
+
+                <div class="panel output-panel">
+                    <div class="panel-header">
+                        <h2 data-i18n="outputTitle">Output JSON</h2>
+                        <div class="actions">
+                            <button id="copyBtn" class="btn-secondary" data-i18n="copy" data-i18n-title="tooltipCopy">Copy</button>
+                            <button id="downloadBtn" class="btn-secondary" data-i18n="download" data-i18n-title="tooltipDownload">Download</button>
+                            <button id="clearOutput" class="btn-secondary" data-i18n="clearOutput" data-i18n-title="tooltipClearOutput">Clear</button>
+                        </div>
+                    </div>
+                    <div class="textarea-wrapper">
+                        <div id="outputLineNumbers" class="line-numbers"></div>
+                        <textarea 
+                            id="outputJson" 
+                            class="json-textarea" 
+                            data-i18n-placeholder="outputPlaceholder"
+                            placeholder="Output will appear here..."
+                            spellcheck="false"
+                            readonly
+                        ></textarea>
+                    </div>
+                    <div class="panel-footer">
+                        <span id="outputStats" class="stats"></span>
+                        <span id="compressionRatio" class="compression-ratio"></span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p data-i18n="footer">Built with precision • Following golden ratio principles</p>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="languages.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
