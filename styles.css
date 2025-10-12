@@ -153,8 +153,10 @@ header {
     flex: 1;
     text-align: left;
     display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
 }
 
 .brand {
@@ -192,10 +194,11 @@ header h1 {
 }
 
 .subtitle {
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     color: var(--color-text-light);
-    font-weight: 300;
+    font-weight: 400;
     margin: 0;
+    line-height: 1.2;
 }
 
 /* Language Selector and Theme Toggle */
@@ -1409,7 +1412,7 @@ footer {
 
 .notification {
     position: fixed;
-    top: var(--space-lg);
+    top: 90px;
     right: var(--space-lg);
     padding: var(--space-md) var(--space-lg);
     background: var(--color-primary);
