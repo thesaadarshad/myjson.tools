@@ -44,7 +44,7 @@ const translations = {
             
             // Control Buttons
             compress: "Compress",
-            beautify: "Beautify",
+            beautify: "Format",
             sort: "Sort",
             typescript: "TypeScript",
             yaml: "YAML",
@@ -231,7 +231,7 @@ const translations = {
             clearOutput: "Limpiar",
             
             compress: "Comprimir",
-            beautify: "Embellecer",
+            beautify: "Formatear",
             sort: "Ordenar",
             typescript: "TypeScript",
             yaml: "YAML",
@@ -411,7 +411,7 @@ const translations = {
             clearOutput: "مسح",
             
             compress: "ضغط",
-            beautify: "تجميل",
+            beautify: "تنسيق",
             sort: "ترتيب",
             typescript: "TypeScript",
             yaml: "YAML",
@@ -591,7 +591,7 @@ const translations = {
             clearOutput: "Effacer",
             
             compress: "Compresser",
-            beautify: "Embellir",
+            beautify: "Formater",
             sort: "Trier",
             typescript: "TypeScript",
             yaml: "YAML",
@@ -771,7 +771,7 @@ const translations = {
             clearOutput: "Löschen",
             
             compress: "Komprimieren",
-            beautify: "Verschönern",
+            beautify: "Formatieren",
             sort: "Sortieren",
             typescript: "TypeScript",
             yaml: "YAML",
