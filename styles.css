@@ -364,6 +364,65 @@ header h1 {
     margin-right: auto;
 }
 
+/* Google AdSense Container */
+.ad-container {
+    margin: 0 auto var(--space-xl);
+    padding: var(--space-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-align: center;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.ad-label {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+.ad-placeholder {
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg);
+    border-radius: var(--radius-sm);
+    position: relative;
+}
+
+/* Placeholder demo styling (remove when adding real ads) */
+.ad-placeholder::before {
+    content: '728 × 90 Leaderboard Ad';
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
+    opacity: 0.5;
+}
+
+/* Hide placeholder text on mobile */
+@media (max-width: 768px) {
+    .ad-placeholder::before {
+        content: '320 × 50 Mobile Banner';
+    }
+}
+
+/* Responsive ad sizing */
+@media (max-width: 768px) {
+    .ad-container {
+        margin-bottom: var(--space-lg);
+        padding: var(--space-sm);
+    }
+    
+    .ad-placeholder {
+        min-height: 50px;
+    }
+}
+
 .mode-btn {
     flex: 1;
     display: flex;
