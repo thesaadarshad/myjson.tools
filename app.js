@@ -104,6 +104,9 @@ class JSONCompressor {
                 this.switchMode(mode);
             });
         });
+
+        // Collapsible button groups (accordion behavior)
+        this.initializeAccordion();
         
         // Compression/Decompression/Beautify/Sort/TypeScript/YAML/XML/CSV/Flatten/Unflatten/Escape/Unescape buttons
         addListener('compressBtn', 'click', () => this.compress());
@@ -117,8 +120,10 @@ class JSONCompressor {
         addListener('unflattenBtn', 'click', () => this.unflattenJSON());
         addListener('escapeBtn', 'click', () => this.escapeJSON());
         addListener('unescapeBtn', 'click', () => this.unescapeJSON());
+        addListener('base64EncodeBtn', 'click', () => this.base64Encode());
+        addListener('base64DecodeBtn', 'click', () => this.base64Decode());
         addListener('decompressBtn', 'click', () => this.decompress());
-        
+
         // Input actions
         addListener('clearInput', 'click', () => this.clearInput());
         addListener('pasteBtn', 'click', () => this.pasteFromClipboard());
@@ -148,10 +153,12 @@ class JSONCompressor {
         this.inputTextarea.addEventListener('input', () => {
             this.updateStats();
             this.updateLineNumbers();
+            this.validateJSON('input');
         });
         this.outputTextarea.addEventListener('input', () => {
             this.updateStats();
             this.updateLineNumbers();
+            this.validateJSON('output');
         });
         
         // Synchronize scroll between textarea and line numbers
@@ -938,6 +945,56 @@ class JSONCompressor {
     }
 
     /**
+     * Encode text to Base64
+     */
+    base64Encode() {
+        const input = this.inputTextarea.value;
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToBase64Encode'), 'error');
+            return;
+        }
+
+        try {
+            // Encode to Base64
+            const encoded = btoa(unescape(encodeURIComponent(input)));
+            
+            this.outputTextarea.value = encoded;
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('base64EncodeSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`Encode error: ${error.message}`, 'error');
+            console.error('Base64 encode error:', error);
+        }
+    }
+
+    /**
+     * Decode Base64 to text
+     */
+    base64Decode() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToBase64Decode'), 'error');
+            return;
+        }
+
+        try {
+            // Decode from Base64
+            const decoded = decodeURIComponent(escape(atob(input)));
+            
+            this.outputTextarea.value = decoded;
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('base64DecodeSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(this.t('invalidBase64'), 'error');
+            console.error('Base64 decode error:', error);
+        }
+    }
+
+    /**
      * Convert JSON to TypeScript interfaces
      */
     convertToTypeScript() {
@@ -1350,6 +1407,155 @@ class JSONCompressor {
     }
 
     /**
+     * Validate JSON and display errors
+     */
+    validateJSON(type) {
+        const textarea = type === 'input' ? this.inputTextarea : this.outputTextarea;
+        const text = textarea.value.trim();
+        const errorPanel = document.getElementById(`${type}ValidationError`);
+        
+        // Hide error panel if text is empty
+        if (!text) {
+            errorPanel.classList.add('hidden');
+            return;
+        }
+        
+        try {
+            JSON.parse(text);
+            // Valid JSON - hide error panel
+            errorPanel.classList.add('hidden');
+        } catch (error) {
+            // Invalid JSON - show error panel with details
+            this.showValidationError(type, error, text);
+        }
+    }
+
+    /**
+     * Show validation error with details
+     */
+    showValidationError(type, error, text) {
+        const errorPanel = document.getElementById(`${type}ValidationError`);
+        const errorMessage = document.getElementById(`${type}ErrorMessage`);
+        const errorLocation = document.getElementById(`${type}ErrorLocation`);
+        const errorSuggestion = document.getElementById(`${type}ErrorSuggestion`);
+        
+        // Parse error message to extract line and column
+        const errorInfo = this.parseJSONError(error.message);
+        
+        // Set error message
+        errorMessage.textContent = errorInfo.message;
+        
+        // Set error location
+        if (errorInfo.line && errorInfo.column) {
+            errorLocation.innerHTML = `${this.t('errorAt')} <strong>${this.t('line')} ${errorInfo.line}, ${this.t('column')} ${errorInfo.column}</strong>`;
+        } else {
+            errorLocation.textContent = '';
+        }
+        
+        // Set helpful suggestion
+        errorSuggestion.textContent = this.getSuggestion(errorInfo, text);
+        
+        // Show error panel
+        errorPanel.classList.remove('hidden');
+    }
+
+    /**
+     * Parse JSON error message to extract line and column
+     */
+    parseJSONError(errorMessage) {
+        const result = {
+            message: errorMessage,
+            line: null,
+            column: null,
+            type: 'unknown'
+        };
+        
+        // Try to extract line and column from error message
+        // Format: "Unexpected token } in JSON at position 123"
+        // Or: "JSON.parse: unexpected character at line 5 column 10"
+        
+        const positionMatch = errorMessage.match(/at position (\d+)/);
+        const lineColMatch = errorMessage.match(/line (\d+) column (\d+)/);
+        
+        if (lineColMatch) {
+            result.line = parseInt(lineColMatch[1]);
+            result.column = parseInt(lineColMatch[2]);
+        } else if (positionMatch) {
+            // Calculate line and column from position
+            const position = parseInt(positionMatch[1]);
+            const lines = errorMessage.split('\n');
+            let currentPos = 0;
+            for (let i = 0; i < lines.length; i++) {
+                if (currentPos + lines[i].length >= position) {
+                    result.line = i + 1;
+                    result.column = position - currentPos + 1;
+                    break;
+                }
+                currentPos += lines[i].length + 1; // +1 for newline
+            }
+        }
+        
+        // Identify error type
+        if (errorMessage.includes('Unexpected token')) {
+            const tokenMatch = errorMessage.match(/Unexpected token (.)/);
+            if (tokenMatch) {
+                result.type = 'unexpected_token';
+                result.token = tokenMatch[1];
+            }
+        } else if (errorMessage.includes('Unexpected end')) {
+            result.type = 'unexpected_end';
+        } else if (errorMessage.includes('Expected')) {
+            result.type = 'expected';
+        }
+        
+        // Simplify message
+        if (errorMessage.includes('Unexpected token')) {
+            result.message = `Unexpected character found in JSON`;
+        } else if (errorMessage.includes('Unexpected end')) {
+            result.message = `Unexpected end of JSON input`;
+        } else {
+            result.message = errorMessage.replace('JSON.parse: ', '').replace('SyntaxError: ', '');
+        }
+        
+        return result;
+    }
+
+    /**
+     * Get helpful suggestion based on error type
+     */
+    getSuggestion(errorInfo, text) {
+        switch (errorInfo.type) {
+            case 'unexpected_token':
+                if (errorInfo.token === '}') {
+                    return 'You might have an extra closing brace or missing a comma between properties.';
+                } else if (errorInfo.token === ']') {
+                    return 'You might have an extra closing bracket or missing a comma between array elements.';
+                } else if (errorInfo.token === ',') {
+                    return 'You might have a trailing comma before a closing bracket/brace.';
+                } else if (errorInfo.token === ':') {
+                    return 'Property names must be enclosed in double quotes.';
+                }
+                return 'Check for missing commas, quotes, or extra characters.';
+                
+            case 'unexpected_end':
+                if (text.includes('{') && !text.includes('}')) {
+                    return 'Missing closing brace } at the end.';
+                } else if (text.includes('[') && !text.includes(']')) {
+                    return 'Missing closing bracket ] at the end.';
+                } else if (text.includes('"') && (text.match(/"/g) || []).length % 2 !== 0) {
+                    return 'Unclosed string - missing closing quote.';
+                }
+                return 'Your JSON appears to be incomplete. Check for missing closing brackets or braces.';
+                
+            case 'expected':
+                return 'Check your JSON syntax - you might be missing quotes around property names or values.';
+                
+            default:
+                return 'Common issues: missing commas, unquoted property names, trailing commas, or single quotes instead of double quotes.';
+        }
+    }
+
+    /**
      * Copy output to clipboard
      */
     async copyToClipboard() {
@@ -1542,6 +1748,55 @@ class JSONCompressor {
             if (compareMode) compareMode.classList.add('active');
             // Update line numbers for compare mode
             this.updateCompareLineNumbers();
+        }
+    }
+
+    /**
+     * Initialize accordion behavior for button groups
+     * Only one group can be expanded at a time
+     */
+    initializeAccordion() {
+        const groups = document.querySelectorAll('.button-group');
+        
+        groups.forEach(group => {
+            const label = group.querySelector('.group-label');
+            
+            if (label) {
+                label.addEventListener('click', () => {
+                    const isCollapsed = group.classList.contains('collapsed');
+                    
+                    if (isCollapsed) {
+                        // Collapse all other groups
+                        groups.forEach(g => {
+                            if (g !== group) {
+                                g.classList.add('collapsed');
+                            }
+                        });
+                        
+                        // Expand this group
+                        group.classList.remove('collapsed');
+                        
+                        // Save expanded group to localStorage
+                        const groupName = group.getAttribute('data-group');
+                        if (groupName) {
+                            localStorage.setItem('json-playground-expanded-group', groupName);
+                        }
+                    } else {
+                        // Collapse this group
+                        group.classList.add('collapsed');
+                        localStorage.removeItem('json-playground-expanded-group');
+                    }
+                });
+            }
+        });
+        
+        // Restore previously expanded group
+        const expandedGroup = localStorage.getItem('json-playground-expanded-group');
+        if (expandedGroup) {
+            const group = document.querySelector(`.button-group[data-group="${expandedGroup}"]`);
+            if (group) {
+                group.classList.remove('collapsed');
+            }
         }
     }
 

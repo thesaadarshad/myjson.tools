@@ -88,6 +88,16 @@
                             </button>
                         </div>
                     </div>
+                    <div id="inputValidationError" class="validation-error hidden">
+                        <div class="validation-error-header">
+                            <span class="error-icon">⚠️</span>
+                            <span class="error-title" data-i18n="validationError">Validation Error</span>
+                            <button class="error-close" onclick="document.getElementById('inputValidationError').classList.add('hidden')" aria-label="Close">×</button>
+                        </div>
+                        <div class="error-message" id="inputErrorMessage"></div>
+                        <div class="error-location" id="inputErrorLocation"></div>
+                        <div class="error-suggestion" id="inputErrorSuggestion"></div>
+                    </div>
                     <div class="textarea-wrapper">
                         <div id="inputLineNumbers" class="line-numbers"></div>
                         <textarea 
@@ -147,9 +157,14 @@
                 </div>
 
                 <div class="control-center">
-                    <!-- Format & Structure Group -->
-                    <div class="button-group">
-                        <div class="group-label" data-i18n="groupFormat">Format</div>
+                    <!-- 1. Format Group -->
+                    <div class="button-group" data-group="format">
+                        <div class="group-label">
+                            <span data-i18n="groupFormat">Format</span>
+                            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
                         <div class="group-buttons">
                             <button id="compressBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipCompress">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -178,57 +193,14 @@
                         </div>
                     </div>
 
-                    <!-- Nested/Flat Group -->
-                    <div class="button-group">
-                        <div class="group-label" data-i18n="groupNested">Nested/Flat</div>
-                        <div class="group-buttons">
-                            <button id="flattenBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipFlatten">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="4 14 10 14 10 20"></polyline>
-                                    <polyline points="20 10 14 10 14 4"></polyline>
-                                    <line x1="14" y1="10" x2="21" y2="3"></line>
-                                    <line x1="3" y1="21" x2="10" y2="14"></line>
-                                </svg>
-                                <span class="btn-label" data-i18n="flatten">Flatten</span>
-                            </button>
-                            <button id="unflattenBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipUnflatten">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="10 14 4 14 4 20"></polyline>
-                                    <polyline points="14 10 20 10 20 4"></polyline>
-                                    <line x1="20" y1="10" x2="13" y2="3"></line>
-                                    <line x1="4" y1="14" x2="11" y2="21"></line>
-                                </svg>
-                                <span class="btn-label" data-i18n="unflatten">Unflatten</span>
-                            </button>
+                    <!-- 2. Converters Group -->
+                    <div class="button-group collapsed" data-group="converters">
+                        <div class="group-label">
+                            <span data-i18n="groupConverters">Converters</span>
+                            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
                         </div>
-                    </div>
-
-                    <!-- String Operations Group -->
-                    <div class="button-group">
-                        <div class="group-label" data-i18n="groupString">String</div>
-                        <div class="group-buttons">
-                            <button id="escapeBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipEscape">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M10 15l-3-3 3-3"></path>
-                                    <path d="M14 9l3 3-3 3"></path>
-                                    <line x1="18" y1="3" x2="6" y2="21"></line>
-                                </svg>
-                                <span class="btn-label" data-i18n="escape">Escape</span>
-                            </button>
-                            <button id="unescapeBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipUnescape">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 15l3-3-3-3"></path>
-                                    <path d="M10 9l-3 3 3 3"></path>
-                                    <line x1="6" y1="3" x2="18" y2="21"></line>
-                                </svg>
-                                <span class="btn-label" data-i18n="unescape">Unescape</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Converters Group -->
-                    <div class="button-group">
-                        <div class="group-label" data-i18n="groupConverters">Converters</div>
                         <div class="group-buttons">
                             <button id="typescriptBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipTypescript">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -267,6 +239,90 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- 3. Encoding Group -->
+                    <div class="button-group collapsed" data-group="encoding">
+                        <div class="group-label">
+                            <span data-i18n="groupEncoding">Encoding</span>
+                            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="group-buttons">
+                            <button id="base64EncodeBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipBase64Encode">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg>
+                                <span class="btn-label" data-i18n="base64Encode">Encode</span>
+                            </button>
+                            <button id="base64DecodeBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipBase64Decode">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+                                </svg>
+                                <span class="btn-label" data-i18n="base64Decode">Decode</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 4. String Group -->
+                    <div class="button-group collapsed" data-group="string">
+                        <div class="group-label">
+                            <span data-i18n="groupString">String</span>
+                            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="group-buttons">
+                            <button id="escapeBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipEscape">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10 15l-3-3 3-3"></path>
+                                    <path d="M14 9l3 3-3 3"></path>
+                                    <line x1="18" y1="3" x2="6" y2="21"></line>
+                                </svg>
+                                <span class="btn-label" data-i18n="escape">Escape</span>
+                            </button>
+                            <button id="unescapeBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipUnescape">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 15l3-3-3-3"></path>
+                                    <path d="M10 9l-3 3 3 3"></path>
+                                    <line x1="6" y1="3" x2="18" y2="21"></line>
+                                </svg>
+                                <span class="btn-label" data-i18n="unescape">Unescape</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 5. Nested/Flat Group -->
+                    <div class="button-group collapsed" data-group="nested">
+                        <div class="group-label">
+                            <span data-i18n="groupNested">Nested/Flat</span>
+                            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="group-buttons">
+                            <button id="flattenBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipFlatten">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="4 14 10 14 10 20"></polyline>
+                                    <polyline points="20 10 14 10 14 4"></polyline>
+                                    <line x1="14" y1="10" x2="21" y2="3"></line>
+                                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                                </svg>
+                                <span class="btn-label" data-i18n="flatten">Flatten</span>
+                            </button>
+                            <button id="unflattenBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipUnflatten">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="10 14 4 14 4 20"></polyline>
+                                    <polyline points="14 10 20 10 20 4"></polyline>
+                                    <line x1="20" y1="10" x2="13" y2="3"></line>
+                                    <line x1="4" y1="14" x2="11" y2="21"></line>
+                                </svg>
+                                <span class="btn-label" data-i18n="unflatten">Unflatten</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="panel output-panel">
@@ -299,6 +355,16 @@
                                 </svg>
                             </button>
                         </div>
+                    </div>
+                    <div id="outputValidationError" class="validation-error hidden">
+                        <div class="validation-error-header">
+                            <span class="error-icon">⚠️</span>
+                            <span class="error-title" data-i18n="validationError">Validation Error</span>
+                            <button class="error-close" onclick="document.getElementById('outputValidationError').classList.add('hidden')" aria-label="Close">×</button>
+                        </div>
+                        <div class="error-message" id="outputErrorMessage"></div>
+                        <div class="error-location" id="outputErrorLocation"></div>
+                        <div class="error-suggestion" id="outputErrorSuggestion"></div>
                     </div>
                     <div class="textarea-wrapper">
                         <div id="outputLineNumbers" class="line-numbers"></div>
