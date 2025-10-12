@@ -145,6 +145,13 @@ const translations = {
             tooltipImportUrl: "Import JSON from URL",
             tooltipDataSummary: "Toggle data type summary",
             tooltipCopyToInput: "Copy output to input for further processing",
+            tooltipFontSize: "Change font size",
+            
+            // Font Size
+            fontSize: "Font Size",
+            fontSizeSmall: "Small",
+            fontSizeMedium: "Medium",
+            fontSizeLarge: "Large",
             
             // URL Import
             importFromUrl: "Import from URL",
@@ -318,6 +325,13 @@ const translations = {
             tooltipImportUrl: "Importar JSON desde URL",
             tooltipDataSummary: "Alternar resumen de tipos de datos",
             tooltipCopyToInput: "Copiar salida a entrada para procesamiento adicional",
+            tooltipFontSize: "Cambiar tamaño de fuente",
+            
+            // Font Size
+            fontSize: "Tamaño de Fuente",
+            fontSizeSmall: "Pequeño",
+            fontSizeMedium: "Mediano",
+            fontSizeLarge: "Grande",
             
             // URL Import
             importFromUrl: "Importar desde URL",
@@ -491,6 +505,13 @@ const translations = {
             tooltipImportUrl: "استيراد JSON من URL",
             tooltipDataSummary: "تبديل ملخص أنواع البيانات",
             tooltipCopyToInput: "نسخ الإخراج إلى الإدخال لمزيد من المعالجة",
+            tooltipFontSize: "تغيير حجم الخط",
+            
+            // Font Size
+            fontSize: "حجم الخط",
+            fontSizeSmall: "صغير",
+            fontSizeMedium: "متوسط",
+            fontSizeLarge: "كبير",
             
             // URL Import
             importFromUrl: "استيراد من URL",
@@ -664,6 +685,13 @@ const translations = {
             tooltipImportUrl: "Importer JSON depuis URL",
             tooltipDataSummary: "Basculer le résumé des types de données",
             tooltipCopyToInput: "Copier la sortie vers l'entrée pour un traitement supplémentaire",
+            tooltipFontSize: "Changer la taille de police",
+            
+            // Font Size
+            fontSize: "Taille de Police",
+            fontSizeSmall: "Petite",
+            fontSizeMedium: "Moyenne",
+            fontSizeLarge: "Grande",
             
             // URL Import
             importFromUrl: "Importer depuis URL",
@@ -837,6 +865,13 @@ const translations = {
             tooltipImportUrl: "JSON von URL importieren",
             tooltipDataSummary: "Datentypzusammenfassung umschalten",
             tooltipCopyToInput: "Ausgabe zur Eingabe kopieren für weitere Verarbeitung",
+            tooltipFontSize: "Schriftgröße ändern",
+            
+            // Font Size
+            fontSize: "Schriftgröße",
+            fontSizeSmall: "Klein",
+            fontSizeMedium: "Mittel",
+            fontSizeLarge: "Groß",
             
             // URL Import
             importFromUrl: "Von URL importieren",

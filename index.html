@@ -79,6 +79,10 @@
     <link rel="apple-touch-icon" href="/icon-192x192.png">
     
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Prism.js Syntax Highlighting -->
+    <link rel="stylesheet" href="prism-light.min.css" id="prism-theme-light">
+    <link rel="stylesheet" href="prism-dark.min.css" id="prism-theme-dark" disabled>
 </head>
 <body dir="ltr">
     <!-- Skip to main content for accessibility -->
@@ -110,6 +114,13 @@
                     <p class="subtitle" data-i18n="subtitle">Your personal JSON toolkit</p>
                 </div>
                 <div class="language-selector">
+                    <button id="fontSizeToggle" class="font-size-toggle" data-i18n-title="tooltipFontSize" aria-label="Toggle font size">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                            <line x1="9" y1="20" x2="15" y2="20"></line>
+                            <line x1="12" y1="4" x2="12" y2="20"></line>
+                        </svg>
+                    </button>
                     <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
                         <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="5"></circle>
@@ -507,6 +518,8 @@
                             spellcheck="false"
                             readonly
                         ></textarea>
+                        <!-- Prism highlighted output (shown when JSON is valid) -->
+                        <pre id="outputJsonHighlighted" class="json-highlighted" style="display: none;"><code class="language-json"></code></pre>
                     </div>
                     <div class="panel-footer">
                         <span id="outputStats" class="stats"></span>
@@ -744,6 +757,10 @@
         </div>
     </div>
 
+    <!-- Prism.js for syntax highlighting -->
+    <script src="prism.min.js"></script>
+    <script src="prism-json.min.js"></script>
+    
     <script src="languages.js"></script>
     <script src="app.js"></script>
     

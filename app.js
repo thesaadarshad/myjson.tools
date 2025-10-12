@@ -20,6 +20,7 @@ class JSONCompressor {
             notification: 'notification',
             languageToggle: 'languageToggle',
             languageMenu: 'languageMenu',
+            fontSizeToggle: 'fontSizeToggle',
             themeToggle: 'themeToggle',
             themeIcon: 'themeIcon',
             // Compare mode elements
@@ -63,6 +64,9 @@ class JSONCompressor {
         // Initialize theme
         this.currentTheme = localStorage.getItem('json-compressor-theme') || 'light';
         
+        // Initialize font size
+        this.currentFontSize = localStorage.getItem('json-compressor-font-size') || 'medium';
+        
         // Initialize mode
         this.currentMode = localStorage.getItem('json-compressor-mode') || 'transform';
         
@@ -74,6 +78,7 @@ class JSONCompressor {
         try {
             this.initializeEventListeners();
             this.setTheme(this.currentTheme);
+            this.setFontSize(this.currentFontSize);
             this.setLanguage(this.currentLanguage);
             this.switchMode(this.currentMode);
             this.updateStats();
@@ -238,6 +243,11 @@ class JSONCompressor {
             console.log('Language picker listeners added');
         }
         
+        if (this.fontSizeToggle) {
+            this.fontSizeToggle.addEventListener('click', () => this.toggleFontSize());
+            console.log('Font size toggle listener added');
+        }
+        
         if (this.themeToggle) {
             this.themeToggle.addEventListener('click', () => this.toggleTheme());
             console.log('Theme toggle listener added');
@@ -326,6 +336,49 @@ class JSONCompressor {
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
             `;
         }
+        
+        // Switch Prism theme
+        const lightTheme = document.getElementById('prism-theme-light');
+        const darkTheme = document.getElementById('prism-theme-dark');
+        
+        if (lightTheme && darkTheme) {
+            if (theme === 'dark') {
+                lightTheme.disabled = true;
+                darkTheme.disabled = false;
+            } else {
+                lightTheme.disabled = false;
+                darkTheme.disabled = true;
+            }
+        }
+    }
+
+    /**
+     * Toggle between font sizes (small -> medium -> large -> small)
+     */
+    toggleFontSize() {
+        const sizes = ['small', 'medium', 'large'];
+        const currentIndex = sizes.indexOf(this.currentFontSize);
+        const nextIndex = (currentIndex + 1) % sizes.length;
+        const newSize = sizes[nextIndex];
+        
+        this.setFontSize(newSize);
+        localStorage.setItem('json-compressor-font-size', newSize);
+        
+        // Show notification with current size
+        const sizeLabels = {
+            'small': this.t('fontSizeSmall'),
+            'medium': this.t('fontSizeMedium'),
+            'large': this.t('fontSizeLarge')
+        };
+        this.showNotification(`${this.t('fontSize')}: ${sizeLabels[newSize]}`, 'success');
+    }
+
+    /**
+     * Set the font size
+     */
+    setFontSize(size) {
+        this.currentFontSize = size;
+        document.body.setAttribute('data-font-size', size);
     }
 
     /**
@@ -1524,6 +1577,41 @@ class JSONCompressor {
     }
 
     /**
+     * Update output display with Prism syntax highlighting
+     * Shows highlighted version for valid JSON, plain textarea otherwise
+     */
+    updateOutputDisplay() {
+        const outputText = this.outputTextarea.value;
+        const highlightedElement = document.getElementById('outputJsonHighlighted');
+        const textarea = this.outputTextarea;
+        
+        // Skip if Prism is not loaded yet
+        if (typeof Prism === 'undefined') {
+            return;
+        }
+        
+        // Check if output is valid JSON
+        try {
+            if (outputText.trim()) {
+                JSON.parse(outputText);
+                // Valid JSON - use Prism highlighting
+                const highlighted = Prism.highlight(outputText, Prism.languages.json, 'json');
+                highlightedElement.querySelector('code').innerHTML = highlighted;
+                highlightedElement.style.display = 'block';
+                textarea.style.display = 'none';
+            } else {
+                // Empty output - show placeholder in textarea
+                highlightedElement.style.display = 'none';
+                textarea.style.display = 'block';
+            }
+        } catch (e) {
+            // Invalid JSON or non-JSON content - show in plain textarea
+            highlightedElement.style.display = 'none';
+            textarea.style.display = 'block';
+        }
+    }
+
+    /**
      * Update statistics for both textareas
      */
     updateStats() {
@@ -1555,6 +1643,9 @@ class JSONCompressor {
         } else {
             this.compressionRatio.textContent = '';
         }
+        
+        // Update Prism syntax highlighting for output
+        this.updateOutputDisplay();
     }
 
     /**

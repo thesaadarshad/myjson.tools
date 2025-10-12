@@ -129,7 +129,7 @@ body {
 
 /* Container with golden ratio max-width */
 .container {
-    max-width: 1400px;
+    max-width: 100%;
     margin: 0 auto;
     padding: var(--space-lg) var(--space-xl);
     min-height: 100vh;
@@ -204,6 +204,30 @@ header h1 {
     align-items: center;
     gap: var(--space-sm);
     min-width: 140px;
+}
+
+.font-size-toggle {
+    width: 40px;
+    height: 40px;
+    padding: var(--space-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.font-size-toggle:hover {
+    background: var(--color-textarea-focus);
+    border-color: var(--color-primary);
+}
+
+.font-size-toggle svg {
+    color: var(--color-text);
 }
 
 .theme-toggle {
@@ -503,6 +527,43 @@ main {
     overflow-y: auto;
 }
 
+/* Font Size Classes */
+body[data-font-size="small"] .json-textarea {
+    font-size: calc(var(--font-size-base) * 0.75);
+}
+
+body[data-font-size="medium"] .json-textarea {
+    font-size: calc(var(--font-size-base) * 0.9);
+}
+
+body[data-font-size="large"] .json-textarea {
+    font-size: calc(var(--font-size-base) * 1.05);
+}
+
+body[data-font-size="small"] .json-highlighted {
+    font-size: calc(var(--font-size-base) * 0.75);
+}
+
+body[data-font-size="medium"] .json-highlighted {
+    font-size: calc(var(--font-size-base) * 0.9);
+}
+
+body[data-font-size="large"] .json-highlighted {
+    font-size: calc(var(--font-size-base) * 1.05);
+}
+
+body[data-font-size="small"] .line-numbers {
+    font-size: calc(var(--font-size-base) * 0.7);
+}
+
+body[data-font-size="medium"] .line-numbers {
+    font-size: calc(var(--font-size-base) * 0.85);
+}
+
+body[data-font-size="large"] .line-numbers {
+    font-size: calc(var(--font-size-base) * 1.0);
+}
+
 .json-textarea::placeholder {
     color: var(--color-text-light);
     opacity: 0.5;
@@ -510,6 +571,34 @@ main {
 
 .json-textarea:focus {
     background: var(--color-textarea-focus);
+}
+
+/* Prism Syntax Highlighted Output */
+.json-highlighted {
+    flex: 1;
+    margin: 0;
+    padding: var(--space-lg);
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+    font-size: calc(var(--font-size-base) * 0.9);
+    line-height: 1.5;
+    background: var(--color-surface) !important;
+    border: none;
+    min-height: 500px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.json-highlighted code {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* Override Prism's default background to match our theme */
+.json-highlighted[class*="language-"] {
+    background: var(--color-surface) !important;
 }
 
 .panel-footer {
