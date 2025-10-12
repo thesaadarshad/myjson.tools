@@ -1,7 +1,7 @@
 {
-  "name": "JSON Playground",
-  "short_name": "JSON Playground",
-  "description": "Transform, format, and convert JSON with ease. A powerful offline-capable JSON tool.",
+  "name": "MyJSON Tools",
+  "short_name": "MyJSON",
+  "description": "Your personal JSON toolkit. Format, validate, compare, and convert JSON with 15+ powerful features. Works offline!",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f8f9fa",
@@ -63,14 +63,14 @@
     {
       "name": "Transform Mode",
       "short_name": "Transform",
-      "description": "Open JSON Playground in Transform mode",
+      "description": "Open MyJSON Tools in Transform mode",
       "url": "/?mode=transform",
       "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     },
     {
       "name": "Compare Mode",
       "short_name": "Compare",
-      "description": "Open JSON Playground in Compare mode",
+      "description": "Open MyJSON Tools in Compare mode",
       "url": "/?mode=compare",
       "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     }

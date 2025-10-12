@@ -9,8 +9,8 @@ const translations = {
         dir: "ltr",
         translations: {
             // Header
-            title: "JSON Playground",
-            subtitle: "Transform, format, and convert JSON with ease",
+            title: "MyJSON Tools",
+            subtitle: "Your personal JSON toolkit",
             
             // Modes
             modeTransform: "Transform",
@@ -194,8 +194,8 @@ const translations = {
         name: "Español",
         dir: "ltr",
         translations: {
-            title: "JSON Playground",
-            subtitle: "Transforma, formatea y convierte JSON con facilidad",
+            title: "MyJSON Tools",
+            subtitle: "Tu kit de herramientas JSON personal",
             
             modeTransform: "Transformar",
             modeCompare: "Comparar",
@@ -367,8 +367,8 @@ const translations = {
         name: "العربية",
         dir: "rtl",
         translations: {
-            title: "JSON Playground",
-            subtitle: "حوّل، نسّق، وغيّر JSON بسهولة",
+            title: "MyJSON Tools",
+            subtitle: "أدوات JSON الشخصية الخاصة بك",
             
             modeTransform: "تحويل",
             modeCompare: "مقارنة",
@@ -540,8 +540,8 @@ const translations = {
         name: "Français",
         dir: "ltr",
         translations: {
-            title: "JSON Playground",
-            subtitle: "Transformez, formatez et convertissez JSON facilement",
+            title: "MyJSON Tools",
+            subtitle: "Votre boîte à outils JSON personnelle",
             
             modeTransform: "Transformer",
             modeCompare: "Comparer",
@@ -713,8 +713,8 @@ const translations = {
         name: "Deutsch",
         dir: "ltr",
         translations: {
-            title: "JSON Playground",
-            subtitle: "JSON einfach transformieren, formatieren und konvertieren",
+            title: "MyJSON Tools",
+            subtitle: "Ihr persönliches JSON-Werkzeugset",
             
             modeTransform: "Transformieren",
             modeCompare: "Vergleichen",

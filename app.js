@@ -1,6 +1,6 @@
 /**
- * JSON Playground Application
- * Handles JSON transformation, formatting, conversion, and more
+ * MyJSON Tools Application
+ * Your personal JSON toolkit - Handles JSON transformation, formatting, conversion, and more
  */
 
 class JSONCompressor {
@@ -109,7 +109,7 @@ class JSONCompressor {
             console.log('✅ PWA installed successfully');
             deferredPrompt = null;
             // Show success notification
-            this.showNotification('App installed successfully! You can now use JSON Playground offline.', 'success');
+            this.showNotification('App installed successfully! You can now use MyJSON Tools offline.', 'success');
         });
         
         // Detect if running as installed PWA
@@ -388,7 +388,13 @@ class JSONCompressor {
         });
 
         // Update document title
-        document.title = t.title || 'JSON Playground';
+        // Update title with mode-specific suffix
+        const baseTitle = t.title || 'MyJSON Tools';
+        if (this.currentMode === 'compare') {
+            document.title = `${baseTitle} - JSON Compare & Diff`;
+        } else {
+            document.title = `${baseTitle} - Free Online JSON Formatter, Validator & Converter`;
+        }
     }
 
     /**
@@ -2160,6 +2166,15 @@ class JSONCompressor {
             if (compareMode) compareMode.classList.add('active');
             // Update line numbers for compare mode
             this.updateCompareLineNumbers();
+        }
+        
+        // Update page title based on mode
+        const t = this.translations[this.currentLanguage]?.translations || {};
+        const baseTitle = t.title || 'MyJSON Tools';
+        if (mode === 'compare') {
+            document.title = `${baseTitle} - JSON Compare & Diff`;
+        } else {
+            document.title = `${baseTitle} - Free Online JSON Formatter, Validator & Converter`;
         }
     }
 

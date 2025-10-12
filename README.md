@@ -1,363 +1,313 @@
-# JSON Playground
+# MyJSON Tools
 
-A minimalistic web application for transforming, formatting, and converting JSON data, built with design precision and following golden ratio principles.
+> **Your Personal JSON Toolkit** - Transform, format, and convert JSON with ease
 
-## Features
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![PWA](https://img.shields.io/badge/PWA-ready-brightgreen.svg)](https://myjson.tools)
+[![Offline](https://img.shields.io/badge/Works-Offline-orange.svg)](https://myjson.tools)
 
-### Transform Mode
-- **JSON Compression**: Remove all unnecessary whitespace and minify JSON
-- **JSON Beautify**: Format JSON with proper indentation for readability
-- **JSON Sort**: Alphabetically sort all object keys recursively
-- **TypeScript Interface Generator**: Auto-generate TypeScript interfaces from JSON
-- **JSON to YAML**: Convert JSON to YAML format with proper structure
-- **JSON to XML**: Convert JSON to XML format with proper tag structure
-- **JSON to CSV**: Convert JSON to CSV format for Excel and data analysis
-- **Flatten JSON**: Convert nested JSON to dot notation for easier processing
-- **Unflatten JSON**: Rebuild nested structure from flattened dot notation
-- **Escape Strings**: Escape special characters for safe JSON string embedding
-- **Unescape Strings**: Restore original strings from escaped JSON
+**Live:** [https://myjson.tools](https://myjson.tools)
 
-### Compare Mode
-- **JSON Diff/Compare**: Compare two JSON objects side-by-side and see detailed differences
-- **Visual Diff Display**: Color-coded differences (added, removed, modified)
-- **Deep Comparison**: Recursively compares nested objects and arrays
-- **Swap Functionality**: Quickly swap JSON A and JSON B
+## 🎯 Overview
 
-### General Features
-- **Mode Switcher**: Seamlessly switch between Transform and Compare modes
-- **Dark Mode**: Toggle between light and dark themes with smooth transitions
-- **Multilingual Support**: Available in English, Spanish, Arabic, French, and German
-- **RTL Support**: Full right-to-left language support for Arabic
-- **Line Numbers**: Easy-to-read line numbers with synchronized scrolling
-- **Real-time Statistics**: View size, line count, and compression ratio
-- **Clipboard Integration**: Quick paste and copy functionality
-- **File Download**: Export processed JSON as a file
-- **Sample Data**: Load example JSON for testing
-- **Keyboard Shortcuts**: Speed up your workflow
-- **Beautiful UI**: Minimalistic design following golden ratio principles
+MyJSON Tools is a free, privacy-first online JSON formatter, validator, and converter with 15+ powerful features. Built with modern web technologies, it works completely client-side—your data never leaves your browser.
 
-## Tech Stack
+Perfect for developers, data analysts, and anyone working with JSON data regularly.
 
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **Web Server**: Nginx (Alpine Linux)
-- **Containerization**: Docker & Docker Compose
-- **Design**: Golden ratio-based layout and spacing
+---
 
-## Quick Start
+## ✨ Features
 
-### Prerequisites
+### 🔄 Transform Operations
+- **JSON Formatter/Beautifier** - Format JSON with proper indentation
+- **JSON Minifier/Compressor** - Remove whitespace to compress JSON
+- **JSON Validator** - Detect and fix syntax errors with detailed messages
+- **JSON Sorter** - Alphabetically sort JSON keys
 
-- Docker
-- Docker Compose
+### 🔀 Format Converters
+- **JSON to YAML** - Convert JSON to YAML format
+- **JSON to CSV** - Export JSON arrays to CSV
+- **JSON to XML** - Transform JSON to XML structure
+- **JSON to Query Params** - Convert between JSON and URL query strings
+- **TypeScript Interface Generator** - Generate TypeScript types from JSON
 
-### Running the Application
+### 🛠️ Data Tools
+- **Flatten/Unflatten JSON** - Convert between nested and dot-notation JSON
+- **Escape/Unescape Strings** - Handle JSON string escaping
+- **Base64 Encode/Decode** - Encode/decode data to/from Base64
+- **Import from URL** - Fetch and load JSON from any URL
 
-1. Clone or navigate to the project directory:
-   ```bash
-   cd /Users/saad/Documents/cursor/json-compressor
-   ```
+### 🔍 Analysis & Comparison
+- **JSON Compare & Diff** - Find differences between two JSON objects
+- **Data Type Summary** - Analyze JSON structure and types
+- **Validation Errors** - Clear error messages with suggestions
 
-2. Build and run with Docker Compose:
-   ```bash
-   docker-compose up -d
-   ```
+### 🎨 User Experience
+- **Dark Mode** - Eye-friendly dark theme
+- **Multilingual** - Available in 5 languages (EN, ES, AR, FR, DE)
+- **Line Numbers** - Easy-to-read line numbers with sync scroll
+- **Real-time Stats** - Character count, line count, size tracking
+- **Keyboard Shortcuts** - Productive keyboard navigation
+- **Copy/Download** - Quick clipboard and file download actions
 
-3. Access the application:
-   ```
-   http://localhost:8090
-   ```
+### 🚀 Technical Features
+- **100% Client-Side** - All processing happens in your browser
+- **Offline PWA** - Works without internet after first visit
+- **Privacy-First** - No data collection, no server communication
+- **Responsive Design** - Works on desktop, tablet, and mobile
+- **Golden Ratio UI** - Beautiful, minimalist design principles
 
-### Stopping the Application
+---
+
+## 🚀 Quick Start
+
+### Using the Live Version
+
+Visit [https://myjson.tools](https://myjson.tools) and start using it immediately. No installation or registration required!
+
+### Running Locally with Docker
 
 ```bash
-docker-compose down
+# Clone the repository
+git clone https://github.com/YOUR-USERNAME/myjson-tools.git
+cd myjson-tools
+
+# Run with Docker Compose
+docker-compose up
+
+# Access at http://localhost:8090
 ```
 
-## Usage
+### Running Without Docker
 
-### Basic Operations
+```bash
+# Clone the repository
+git clone https://github.com/YOUR-USERNAME/myjson-tools.git
+cd myjson-tools
 
-1. **Compress JSON**:
-   - Paste or type JSON in the left panel
-   - Click the "Compress" button or press `Cmd/Ctrl + Enter`
-   - Compressed JSON appears in the right panel
+# Serve with any static server
+# Example with Python:
+python3 -m http.server 8090
 
-2. **Beautify JSON**:
-   - Paste minified or messy JSON in the left panel
-   - Click the "Beautify" button (star icon)
-   - Beautifully formatted JSON appears in the right panel
+# Or with Node.js:
+npx http-server -p 8090
 
-3. **Sort JSON**:
-   - Paste JSON in the left panel
-   - Click the "Sort" button
-   - JSON with alphabetically sorted keys appears in the right panel
-   - Note: Arrays maintain their original order, only object keys are sorted
+# Access at http://localhost:8090
+```
 
-4. **TypeScript Interface Generator**:
-   - Paste JSON in the left panel
-   - Click the "TypeScript" button
-   - TypeScript interfaces are automatically generated in the right panel
-   - Handles nested objects, arrays, and complex structures
-   - Perfect for rapid TypeScript development and type-safe API integration
+---
 
-5. **JSON to YAML**:
-   - Paste JSON in the left panel
-   - Click the "YAML" button (code brackets icon)
-   - Properly formatted YAML appears in the right panel
-   - Perfect for Kubernetes configs, Docker Compose, and more
+## 📖 Usage Guide
 
-6. **JSON to XML**:
-   - Paste JSON in the left panel
-   - Click the "XML" button (document icon)
-   - Properly formatted XML appears in the right panel
-   - Handles nested objects, arrays, and special XML characters
-   - Perfect for API integrations, data exchange, and legacy systems
+### Transform Mode
 
-7. **JSON to CSV**:
-   - Paste JSON in the left panel
-   - Click the "CSV" button (grid icon)
-   - CSV output appears in the right panel
-   - **Array of objects** → Table format with headers (perfect for Excel)
-   - **Single object** → Two-column format (key, value)
-   - Proper CSV escaping (commas, quotes, newlines)
-   - Perfect for data analysis, Excel imports, and spreadsheets
-
-8. **Flatten JSON**:
-   - Paste nested JSON in the left panel
-   - Click the "Flatten" button (minimize icon)
-   - Flattened JSON with dot notation appears in the right panel
-   - Example: `{"user": {"name": "John"}}` → `{"user.name": "John"}`
-   - Perfect for working with databases, configuration files, and flat structures
-
-9. **Unflatten JSON**:
-   - Paste flattened JSON with dot notation in the left panel
-   - Click the "Unflatten" button (expand icon)
-   - Nested JSON structure is rebuilt in the right panel
-   - Example: `{"user.name": "John"}` → `{"user": {"name": "John"}}`
-   - Automatically handles arrays and nested objects
-
-10. **Escape String**:
-   - Paste any text or JSON string in the left panel
-   - Click the "Escape" button
-   - String with escaped characters appears in the right panel
-   - Example: `Hello "World"` → `Hello \"World\"`
-   - Perfect for embedding strings inside JSON values
-
-11. **Unescape String**:
-   - Paste escaped JSON string in the left panel
-   - Click the "Unescape" button
-   - Original string is restored in the right panel
-   - Example: `Hello \"World\"` → `Hello "World"`
-   - Handles all JSON escape sequences (\n, \t, \\, etc.)
-
-12. **Dark Mode**:
-   - Click the sun/moon icon in the header to toggle themes
-   - Your preference is saved automatically
+1. **Paste or type** JSON into the left panel
+2. **Click a button** to perform an operation:
+   - **Beautify** - Format with indentation
+   - **Compress** - Minify to single line
+   - **Sort** - Sort keys alphabetically
+   - **TypeScript** - Generate TypeScript interfaces
+   - **YAML/CSV/XML** - Convert to other formats
+3. **View results** in the right panel
+4. **Copy or download** the output
 
 ### Compare Mode
 
-**NEW: JSON Diff/Compare functionality!**
+1. **Switch to Compare mode** using the mode toggle
+2. **Paste JSON** into panels A and B
+3. **Click Compare** to see differences
+4. **Navigate** through changes with prev/next buttons
+5. **View details** in the collapsible diff panel
 
-1. **Switch to Compare Mode**:
-   - Click the "Compare" button at the top (below the header)
-   - The layout will change to show two side-by-side JSON inputs
+### Import from URL
 
-2. **Compare JSON objects**:
-   - Paste your original JSON into the left panel (JSON A)
-   - Paste your modified JSON into the right panel (JSON B)
-   - Click the "Compare" button in the center
-   - View detailed differences in the output section below
-
-3. **Understanding the Diff**:
-   - **Green (+ Added)**: Fields that exist in JSON B but not in JSON A
-   - **Red (- Removed)**: Fields that exist in JSON A but not in JSON B
-   - **Blue (≠ Modified)**: Fields that have different values between the two JSONs
-   - Deep comparison works recursively through nested objects and arrays
-
-4. **Additional Compare Features**:
-   - **Swap**: Quickly exchange JSON A and JSON B contents
-   - **Paste**: Paste from clipboard to either JSON field
-   - **Clear**: Clear individual JSON fields or the diff output
-   - **Copy**: Copy the diff results to clipboard
+1. **Click the download icon** in the input panel
+2. **Enter a URL** that returns JSON
+3. **Click Import** to load the data
+4. JSON is automatically validated and formatted
 
 ### Keyboard Shortcuts
 
-- `Cmd/Ctrl + Enter` - Compress JSON (Transform mode) / Compare JSON (Compare mode)
-- `Cmd/Ctrl + Shift + Enter` - Decompress JSON (Transform mode)
-- `Cmd/Ctrl + K` - Clear input
+- `Ctrl/Cmd + Enter` - Process JSON (Transform/Compare)
+- `Ctrl/Cmd + K` - Clear input
+- `Ctrl/Cmd + D` - Download result
+- `Ctrl/Cmd + /` - Toggle dark mode
 
-### Additional Features
+---
 
-- **Mode Switcher**: Toggle between Transform and Compare modes (preference saved)
-- **Theme Toggle**: Switch between light and dark modes with the sun/moon button
-- **Language Selection**: Choose from 5 languages using the dropdown in the header
-- **Clear**: Remove all content from input or output
-- **Paste**: Paste from clipboard to input
-- **Copy**: Copy output to clipboard
-- **Download**: Save output as JSON file (Transform mode)
-- **Sample**: Load example JSON for testing (Transform mode)
+## 🎨 Design Philosophy
 
-### Supported Languages
-
-The application is fully translated into:
-- **English** (en)
-- **Spanish** (es)
-- **Arabic** (ar) - with RTL support
-- **French** (fr)
-- **German** (de)
-
-The selected language, theme, and mode are automatically saved in your browser's localStorage.
-
-## Design Philosophy
-
-This application follows strict design principles:
-
-### Golden Ratio (φ ≈ 1.618)
-
-The entire UI is built around the golden ratio for harmonious proportions:
-
-- **Spacing**: All margins and paddings use golden ratio multipliers
-- **Typography**: Font sizes scale using φ
-- **Layout**: Component sizes follow golden ratio proportions
-
-### Minimalism
-
-- Clean, uncluttered interface
-- Focus on core functionality
-- No unnecessary decorations
-- Intuitive user experience
+MyJSON Tools follows the **Golden Ratio** (φ = 1.618) in spacing, typography, and layout for a harmonious, balanced interface.
 
 ### Color Palette
 
 **Light Mode:**
-- Background: #FAFAFA
-- Surface: #FFFFFF
-- Primary: #2C3E50
-- Accent: #3498DB
+- Primary: #3b82f6 (Blue)
+- Background: #f8f9fa
+- Surface: #ffffff
+- Text: #1f2937
 
 **Dark Mode:**
-- Background: #1A1A1A
-- Surface: #2D2D2D
-- Primary: #E8E8E8
-- Accent: #5DADE2
-
-Both themes use the golden ratio for spacing and maintain perfect contrast ratios for accessibility.
-
-## Project Structure
-
-```
-json-playground/
-├── index.html          # Main HTML structure with Transform and Compare modes
-├── styles.css          # CSS with golden ratio styling and dark mode
-├── languages.js        # Multilingual translations (EN, ES, AR, FR, DE)
-├── app.js              # JavaScript application logic with diff algorithm
-├── nginx.conf          # Nginx configuration
-├── Dockerfile          # Docker image definition
-├── docker-compose.yml  # Docker Compose configuration
-├── future-releases.md  # Upcoming features roadmap
-└── README.md           # This file
-```
-
-## Adding New Languages
-
-To add a new language:
-
-1. Open `languages.js`
-2. Add a new language object following this structure:
-
-```javascript
-languageCode: {
-    name: "Language Name",
-    dir: "ltr",  // or "rtl" for right-to-left languages
-    translations: {
-        title: "Translated Title",
-        // ... add all translation keys
-    }
-}
-```
-
-3. Add the language option to the dropdown in `index.html`:
-
-```html
-<option value="languageCode">Language Name</option>
-```
-
-4. Rebuild the Docker image:
-
-```bash
-docker-compose up -d --build
-```
-
-## Development
-
-### Running Locally (without Docker)
-
-You can also run this application locally using any static file server:
-
-```bash
-# Using Python
-python -m http.server 8090
-
-# Using Node.js
-npx serve -p 8090
-
-# Using PHP
-php -S localhost:8090
-```
-
-### Rebuilding the Docker Image
-
-After making changes to the code:
-
-```bash
-docker-compose up -d --build
-```
-
-## Browser Support
-
-- Chrome/Edge (latest)
-- Firefox (latest)
-- Safari (latest)
-- Opera (latest)
-
-## Performance
-
-- Lightweight: ~25KB total (uncompressed)
-- Fast load times
-- No external dependencies
-- Client-side processing (no server required)
-
-## Security
-
-- No data is sent to any server
-- All processing happens in the browser
-- Secure headers configured in Nginx
-- XSS protection enabled
-
-## License
-
-This project is open source and available for personal and commercial use.
-
-## Future Roadmap
-
-We have exciting features planned! Check out our [Future Releases Roadmap](future-releases.md) to see what's coming next and vote on features you'd like to see.
-
-**Upcoming highlights:**
-- JSON Diff/Compare
-- TypeScript Interface Generator
-- History/Recent Files
-- JSON Path Tester
-- And 36 more features!
-
-## Contributing
-
-Feel free to submit issues, fork the repository, and create pull requests for any improvements.
-
-## Support
-
-For issues or questions, please open an issue in the project repository.
+- Primary: #3b82f6 (Blue)
+- Background: #0f0f0f
+- Surface: #1a1a1a
+- Text: #f8f9fa
 
 ---
 
-Built with precision • Following golden ratio principles
+## 🏗️ Tech Stack
 
+- **HTML5** - Semantic markup
+- **CSS3** - Modern styling with CSS Variables
+- **Vanilla JavaScript** - No framework dependencies
+- **PWA** - Progressive Web App capabilities
+- **Nginx** - Production web server
+- **Docker** - Containerized deployment
+
+---
+
+## 📁 Project Structure
+
+```
+myjson-tools/
+├── index.html              # Main HTML structure
+├── styles.css              # All CSS styling
+├── app.js                  # Core application logic
+├── languages.js            # i18n translations (5 languages)
+├── manifest.json           # PWA manifest
+├── service-worker.js       # Offline caching
+├── sitemap.xml             # SEO sitemap
+├── robots.txt              # Search engine directives
+├── browserconfig.xml       # Windows tile config
+├── logo.svg                # Application logo
+├── favicon.svg             # Favicon
+├── nginx.conf              # Nginx configuration
+├── Dockerfile              # Docker image definition
+├── docker-compose.yml      # Docker Compose setup
+├── generate-icons.sh       # PWA icon generator
+├── icon-*.png              # PWA icons (various sizes)
+├── seo-plan.md             # SEO implementation guide
+├── domain-research.md      # Domain selection research
+├── future-releases.md      # Feature roadmap
+└── README.md               # This file
+```
+
+---
+
+## 🌍 Multilingual Support
+
+MyJSON Tools is available in:
+
+- 🇺🇸 **English** (default)
+- 🇪🇸 **Español** (Spanish)
+- 🇸🇦 **العربية** (Arabic) - with RTL support
+- 🇫🇷 **Français** (French)
+- 🇩🇪 **Deutsch** (German)
+
+Language preference is saved in localStorage and persists across sessions.
+
+---
+
+## 🔒 Privacy & Security
+
+- **100% Client-Side** - All JSON processing happens in your browser
+- **No Data Collection** - We don't track, store, or transmit your data
+- **No Cookies** - Only localStorage for preferences
+- **No External Requests** - Except when you explicitly import from URL
+- **HTTPS Only** - Secure connection required
+- **Open Source** - Full transparency, audit the code yourself
+
+---
+
+## 🎯 Use Cases
+
+- **API Development** - Test and debug API responses
+- **Configuration Files** - Format and validate JSON configs
+- **Data Migration** - Convert between JSON and other formats
+- **Code Generation** - Generate TypeScript/interfaces from JSON
+- **Data Analysis** - Compare JSON from different sources
+- **Learning** - Understand JSON structure and syntax
+- **Documentation** - Create readable JSON examples
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how you can help:
+
+1. **Report Bugs** - Open an issue with details
+2. **Suggest Features** - Check `future-releases.md` first
+3. **Submit PRs** - Fork, create a branch, make changes, submit PR
+4. **Improve Translations** - Help translate to more languages
+5. **Share** - Tell others about MyJSON Tools
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/YOUR-USERNAME/myjson-tools.git
+cd myjson-tools
+
+# Make changes to files
+
+# Test locally
+docker-compose up
+
+# Submit a pull request
+```
+
+---
+
+## 📈 Roadmap
+
+See `future-releases.md` for a comprehensive list of planned features.
+
+**Coming Soon:**
+- JSON Path Tester
+- History/Recent Files
+- File Upload Support
+- JWT Decoder
+- More code generators (Go, Python, Java)
+
+---
+
+## 📝 License
+
+MIT License - see LICENSE file for details
+
+---
+
+## 🙏 Acknowledgments
+
+- Inspired by the need for a privacy-first JSON tool
+- Built with love for the developer community
+- Thanks to all contributors and users
+
+---
+
+## 📞 Support
+
+- **Website:** [https://myjson.tools](https://myjson.tools)
+- **Issues:** [GitHub Issues](https://github.com/YOUR-USERNAME/myjson-tools/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/YOUR-USERNAME/myjson-tools/discussions)
+
+---
+
+## ⭐ Show Your Support
+
+If you find MyJSON Tools useful, please:
+- ⭐ Star the repository on GitHub
+- 🐦 Share on Twitter/social media
+- 📝 Write a blog post or review
+- 🤝 Contribute code or translations
+- 💬 Tell your friends and colleagues
+
+---
+
+<div align="center">
+
+**Made with ❤️ for developers**
+
+[Website](https://myjson.tools) • [GitHub](https://github.com/YOUR-USERNAME/myjson-tools) • [Report Bug](https://github.com/YOUR-USERNAME/myjson-tools/issues)
+
+</div>

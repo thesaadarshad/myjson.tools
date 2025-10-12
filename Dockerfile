@@ -18,6 +18,11 @@ COPY manifest.json /usr/share/nginx/html/
 COPY service-worker.js /usr/share/nginx/html/
 COPY icon-*.png /usr/share/nginx/html/
 
+# Copy SEO files
+COPY sitemap.xml /usr/share/nginx/html/
+COPY robots.txt /usr/share/nginx/html/
+COPY browserconfig.xml /usr/share/nginx/html/
+
 # Copy logo and favicon
 COPY logo.svg /usr/share/nginx/html/
 COPY favicon.svg /usr/share/nginx/html/

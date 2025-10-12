@@ -1,0 +1,12 @@
+# robots.txt for MyJSON Tools
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://myjson.tools/sitemap.xml
+
+# Crawl-delay (optional, be gentle)
+Crawl-delay: 1
+
+# Disallow nothing - everything is public
+
