@@ -13,6 +13,11 @@ COPY styles.css /usr/share/nginx/html/
 COPY languages.js /usr/share/nginx/html/
 COPY app.js /usr/share/nginx/html/
 
+# Copy PWA files
+COPY manifest.json /usr/share/nginx/html/
+COPY service-worker.js /usr/share/nginx/html/
+COPY icon-*.png /usr/share/nginx/html/
+
 # Expose port 80
 EXPOSE 80
 

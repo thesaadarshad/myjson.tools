@@ -77,9 +77,43 @@ class JSONCompressor {
             this.switchMode(this.currentMode);
             this.updateStats();
             this.updateLineNumbers();
+            this.initializePWA();
             console.log('JSONCompressor initialized successfully');
         } catch (error) {
             console.error('Error during initialization:', error);
+        }
+    }
+
+    /**
+     * Initialize PWA install prompt
+     */
+    initializePWA() {
+        let deferredPrompt;
+        
+        // Listen for beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Store the event for later use
+            deferredPrompt = e;
+            console.log('💡 PWA install prompt available');
+            
+            // Optional: Show custom install button (can be added to UI later)
+            // For now, just log that it's available
+            // Users can still install via browser menu
+        });
+        
+        // Listen for app installed event
+        window.addEventListener('appinstalled', () => {
+            console.log('✅ PWA installed successfully');
+            deferredPrompt = null;
+            // Show success notification
+            this.showNotification('App installed successfully! You can now use JSON Playground offline.', 'success');
+        });
+        
+        // Detect if running as installed PWA
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            console.log('🚀 Running as installed PWA');
         }
     }
 
