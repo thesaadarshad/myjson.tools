@@ -39,6 +39,34 @@ This document tracks planned features and enhancements for JSON Playground. Item
 
 ---
 
+### JSON to Query Params ✅
+**Status:** ✅ Completed  
+**Complexity:** Low  
+**Value:** Medium  
+**Completed:** October 12, 2025
+
+**Description:**
+- **JSON → Query Params:** Convert JSON objects to URL query string format
+- **Query Params → JSON:** Reverse conversion with intelligent parsing
+- Smart bidirectional detection (automatically detects input format)
+- Nested object support with dot notation (e.g., `user.name=John`)
+- Array support with bracket notation (e.g., `tags[]=red&tags[]=blue`)
+- Array of objects with indexed notation (e.g., `users[0].name=John`)
+- Full URL encoding/decoding (handles special characters)
+- Type-aware parsing (numbers, booleans, null, strings)
+
+**Key Features Delivered:**
+- Bidirectional conversion with automatic format detection
+- Dot notation for nested objects
+- Multiple array formats (bracket notation, indexed)
+- Proper URL encoding and decoding
+- Type inference (converts "true" to boolean, "123" to number)
+- Handles complex nested structures
+- Full multilingual support across all 5 languages
+- Perfect for API testing, URL debugging, and query string manipulation
+
+---
+
 ### Flatten/Unflatten JSON ✅
 **Status:** ✅ Completed  
 **Complexity:** Low  
@@ -482,25 +510,6 @@ These are the most impactful features recommended for near-term implementation.
 - Support for text and JSON
 - URL-safe Base64 option
 - Auto-detect encoding
-
----
-
-### 18. JSON to Query Params
-**Status:** ⏳ Planned  
-**Complexity:** Low  
-**Value:** Medium  
-
-**Description:**
-- Convert JSON to URL query string
-- Handle nested objects (bracket notation)
-- URL encoding
-- Reverse: parse query params to JSON
-
-**Example:**
-```
-Input: {"name": "John", "age": 30}
-Output: ?name=John&age=30
-```
 
 ---
 

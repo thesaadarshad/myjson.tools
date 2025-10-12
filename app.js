@@ -116,6 +116,7 @@ class JSONCompressor {
         addListener('yamlBtn', 'click', () => this.convertToYAML());
         addListener('xmlBtn', 'click', () => this.convertToXML());
         addListener('csvBtn', 'click', () => this.convertToCSV());
+        addListener('queryParamsBtn', 'click', () => this.convertToQueryParams());
         addListener('flattenBtn', 'click', () => this.flattenJSON());
         addListener('unflattenBtn', 'click', () => this.unflattenJSON());
         addListener('escapeBtn', 'click', () => this.escapeJSON());
@@ -762,6 +763,200 @@ class JSONCompressor {
         }
         
         return str;
+    }
+
+    /**
+     * Convert JSON to Query Parameters (or reverse)
+     * Intelligently detects direction based on input format
+     */
+    convertToQueryParams() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToQueryParams'), 'error');
+            return;
+        }
+
+        try {
+            // Try to detect if input is query params or JSON
+            // Query params typically start with key= or ?key= or &key=
+            const looksLikeQueryParams = /^[?&]?[\w\[\]\.]+=/m.test(input);
+            
+            if (looksLikeQueryParams) {
+                // Convert Query Params to JSON
+                const json = this.queryParamsToJSON(input);
+                this.outputTextarea.value = JSON.stringify(json, null, 2);
+                this.showNotification(this.t('queryParamsToJsonSuccess'), 'success');
+            } else {
+                // Convert JSON to Query Params
+                const parsed = JSON.parse(input);
+                const queryString = this.jsonToQueryParams(parsed);
+                this.outputTextarea.value = queryString;
+                this.showNotification(this.t('queryParamsSuccess'), 'success');
+            }
+            
+            this.updateStats();
+            this.updateLineNumbers();
+        } catch (error) {
+            this.showNotification(`${this.t('conversionError')}: ${error.message}`, 'error');
+            console.error('Query params conversion error:', error);
+        }
+    }
+
+    /**
+     * Convert JSON object to query parameters string
+     */
+    jsonToQueryParams(obj, prefix = '') {
+        const params = [];
+        
+        const addParam = (key, value) => {
+            if (value === null || value === undefined) {
+                params.push(encodeURIComponent(key));
+            } else if (typeof value === 'object' && !Array.isArray(value)) {
+                // Nested object - use dot notation
+                const nested = this.jsonToQueryParams(value, key);
+                if (nested) params.push(nested);
+            } else if (Array.isArray(value)) {
+                // Array - use bracket notation
+                value.forEach((item, index) => {
+                    if (typeof item === 'object' && item !== null) {
+                        // Array of objects
+                        const nested = this.jsonToQueryParams(item, `${key}[${index}]`);
+                        if (nested) params.push(nested);
+                    } else {
+                        // Array of primitives - use bracket notation
+                        params.push(`${encodeURIComponent(key)}[]=${encodeURIComponent(item)}`);
+                    }
+                });
+            } else {
+                // Primitive value
+                params.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
+            }
+        };
+        
+        if (typeof obj !== 'object' || obj === null) {
+            return '';
+        }
+        
+        for (const [key, value] of Object.entries(obj)) {
+            const fullKey = prefix ? `${prefix}.${key}` : key;
+            addParam(fullKey, value);
+        }
+        
+        return params.join('&');
+    }
+
+    /**
+     * Convert query parameters string to JSON object
+     */
+    queryParamsToJSON(queryString) {
+        // Remove leading ? or & if present
+        const cleanQuery = queryString.replace(/^[?&]+/, '');
+        
+        if (!cleanQuery) {
+            return {};
+        }
+        
+        const result = {};
+        const params = cleanQuery.split('&');
+        
+        params.forEach(param => {
+            // Split only on first = to handle values with =
+            const eqIndex = param.indexOf('=');
+            let key, value;
+            
+            if (eqIndex === -1) {
+                // No value, just key
+                key = decodeURIComponent(param);
+                value = null;
+            } else {
+                key = decodeURIComponent(param.substring(0, eqIndex));
+                value = decodeURIComponent(param.substring(eqIndex + 1));
+            }
+            
+            // Handle array notation key[]
+            if (key.endsWith('[]')) {
+                const arrayKey = key.slice(0, -2);
+                if (!result[arrayKey]) {
+                    result[arrayKey] = [];
+                }
+                result[arrayKey].push(this.parseValue(value));
+            }
+            // Handle indexed array notation key[0]
+            else if (/\[\d+\]/.test(key)) {
+                const match = key.match(/^(.+?)\[(\d+)\](.*)$/);
+                if (match) {
+                    const [, arrayKey, index, rest] = match;
+                    if (!result[arrayKey]) {
+                        result[arrayKey] = [];
+                    }
+                    const idx = parseInt(index, 10);
+                    if (rest) {
+                        // Nested property in array item
+                        if (!result[arrayKey][idx]) {
+                            result[arrayKey][idx] = {};
+                        }
+                        this.setNestedValue(result[arrayKey][idx], rest.replace(/^\./, ''), this.parseValue(value));
+                    } else {
+                        result[arrayKey][idx] = this.parseValue(value);
+                    }
+                }
+            }
+            // Handle dot notation key.nested.prop
+            else if (key.includes('.')) {
+                this.setNestedValue(result, key, this.parseValue(value));
+            }
+            // Simple key-value
+            else {
+                result[key] = this.parseValue(value);
+            }
+        });
+        
+        return result;
+    }
+
+    /**
+     * Set a nested value in an object using dot notation
+     */
+    setNestedValue(obj, path, value) {
+        const keys = path.split('.');
+        let current = obj;
+        
+        for (let i = 0; i < keys.length - 1; i++) {
+            const key = keys[i];
+            if (!current[key] || typeof current[key] !== 'object') {
+                current[key] = {};
+            }
+            current = current[key];
+        }
+        
+        current[keys[keys.length - 1]] = value;
+    }
+
+    /**
+     * Parse a string value to its appropriate type
+     */
+    parseValue(value) {
+        if (value === null || value === 'null') {
+            return null;
+        }
+        if (value === 'undefined') {
+            return undefined;
+        }
+        if (value === 'true') {
+            return true;
+        }
+        if (value === 'false') {
+            return false;
+        }
+        // Try to parse as number
+        if (/^-?\d+(\.\d+)?$/.test(value)) {
+            const num = Number(value);
+            if (!isNaN(num)) {
+                return num;
+            }
+        }
+        return value;
     }
 
     /**
