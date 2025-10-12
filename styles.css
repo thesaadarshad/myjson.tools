@@ -194,7 +194,7 @@ header h1 {
 }
 
 .subtitle {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     color: var(--color-text-light);
     font-weight: 400;
     margin: 0;
