@@ -179,6 +179,10 @@ class JSONCompressor {
             console.log('Theme toggle listener added');
         }
         
+        // Data Summary toggles
+        addListener('inputSummaryToggle', 'click', () => this.toggleSummary('input'));
+        addListener('outputSummaryToggle', 'click', () => this.toggleSummary('output'));
+        
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
         console.log('Keyboard shortcuts listener added');
@@ -1207,6 +1211,142 @@ class JSONCompressor {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    /**
+     * Toggle data type summary panel
+     */
+    toggleSummary(type) {
+        const summaryPanel = document.getElementById(`${type}Summary`);
+        const toggleButton = document.getElementById(`${type}SummaryToggle`);
+        
+        if (summaryPanel && toggleButton) {
+            const isCollapsed = summaryPanel.classList.contains('collapsed');
+            
+            if (isCollapsed) {
+                summaryPanel.classList.remove('collapsed');
+                toggleButton.classList.add('expanded');
+                // Update summary when expanding
+                this.updateDataSummary(type);
+            } else {
+                summaryPanel.classList.add('collapsed');
+                toggleButton.classList.remove('expanded');
+            }
+        }
+    }
+
+    /**
+     * Update data type summary for input or output
+     */
+    updateDataSummary(type) {
+        const textarea = type === 'input' ? this.inputTextarea : this.outputTextarea;
+        const text = textarea.value;
+        
+        if (!text) {
+            // Reset to zeros if empty
+            this.resetDataSummary(type);
+            return;
+        }
+        
+        try {
+            const data = JSON.parse(text);
+            const analysis = this.analyzeJSON(data);
+            
+            // Update counts
+            document.getElementById(`${type}StringCount`).textContent = analysis.strings;
+            document.getElementById(`${type}NumberCount`).textContent = analysis.numbers;
+            document.getElementById(`${type}BooleanCount`).textContent = analysis.booleans;
+            document.getElementById(`${type}ObjectCount`).textContent = analysis.objects;
+            document.getElementById(`${type}ArrayCount`).textContent = analysis.arrays;
+            document.getElementById(`${type}NullCount`).textContent = analysis.nulls;
+            document.getElementById(`${type}MaxDepth`).textContent = analysis.maxDepth;
+            document.getElementById(`${type}TotalKeys`).textContent = analysis.totalKeys;
+        } catch (error) {
+            // If JSON is invalid, reset to zeros
+            this.resetDataSummary(type);
+        }
+    }
+
+    /**
+     * Reset data summary to zeros
+     */
+    resetDataSummary(type) {
+        document.getElementById(`${type}StringCount`).textContent = '0';
+        document.getElementById(`${type}NumberCount`).textContent = '0';
+        document.getElementById(`${type}BooleanCount`).textContent = '0';
+        document.getElementById(`${type}ObjectCount`).textContent = '0';
+        document.getElementById(`${type}ArrayCount`).textContent = '0';
+        document.getElementById(`${type}NullCount`).textContent = '0';
+        document.getElementById(`${type}MaxDepth`).textContent = '0';
+        document.getElementById(`${type}TotalKeys`).textContent = '0';
+    }
+
+    /**
+     * Recursively analyze JSON structure
+     */
+    analyzeJSON(data, depth = 0) {
+        const analysis = {
+            strings: 0,
+            numbers: 0,
+            booleans: 0,
+            objects: 0,
+            arrays: 0,
+            nulls: 0,
+            maxDepth: depth,
+            totalKeys: 0
+        };
+        
+        if (data === null) {
+            analysis.nulls = 1;
+            return analysis;
+        }
+        
+        const type = typeof data;
+        
+        if (type === 'string') {
+            analysis.strings = 1;
+        } else if (type === 'number') {
+            analysis.numbers = 1;
+        } else if (type === 'boolean') {
+            analysis.booleans = 1;
+        } else if (Array.isArray(data)) {
+            analysis.arrays = 1;
+            analysis.maxDepth = depth + 1;
+            
+            // Analyze each element
+            data.forEach(item => {
+                const itemAnalysis = this.analyzeJSON(item, depth + 1);
+                analysis.strings += itemAnalysis.strings;
+                analysis.numbers += itemAnalysis.numbers;
+                analysis.booleans += itemAnalysis.booleans;
+                analysis.objects += itemAnalysis.objects;
+                analysis.arrays += itemAnalysis.arrays;
+                analysis.nulls += itemAnalysis.nulls;
+                analysis.totalKeys += itemAnalysis.totalKeys;
+                analysis.maxDepth = Math.max(analysis.maxDepth, itemAnalysis.maxDepth);
+            });
+        } else if (type === 'object') {
+            analysis.objects = 1;
+            analysis.maxDepth = depth + 1;
+            
+            const keys = Object.keys(data);
+            analysis.totalKeys = keys.length;
+            
+            // Analyze each value
+            keys.forEach(key => {
+                const valueAnalysis = this.analyzeJSON(data[key], depth + 1);
+                analysis.strings += valueAnalysis.strings;
+                analysis.numbers += valueAnalysis.numbers;
+                analysis.booleans += valueAnalysis.booleans;
+                analysis.objects += valueAnalysis.objects;
+                analysis.arrays += valueAnalysis.arrays;
+                analysis.nulls += valueAnalysis.nulls;
+                analysis.totalKeys += valueAnalysis.totalKeys;
+                analysis.maxDepth = Math.max(analysis.maxDepth, valueAnalysis.maxDepth);
+            });
+        }
+        
+        return analysis;
     }
 
     /**

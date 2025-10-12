@@ -100,6 +100,49 @@
                     </div>
                     <div class="panel-footer">
                         <span id="inputStats" class="stats"></span>
+                        <button id="inputSummaryToggle" class="summary-toggle" data-i18n-title="tooltipDataSummary">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            <span data-i18n="dataSummary">Data Summary</span>
+                        </button>
+                    </div>
+                    <div id="inputSummary" class="data-summary collapsed">
+                        <div class="summary-content">
+                            <div class="summary-types">
+                                <span class="type-item" title="Strings">
+                                    <span class="type-icon">📝</span>
+                                    <span id="inputStringCount">0</span> <span data-i18n="strings">strings</span>
+                                </span>
+                                <span class="type-item" title="Numbers">
+                                    <span class="type-icon">🔢</span>
+                                    <span id="inputNumberCount">0</span> <span data-i18n="numbers">numbers</span>
+                                </span>
+                                <span class="type-item" title="Booleans">
+                                    <span class="type-icon">✓</span>
+                                    <span id="inputBooleanCount">0</span> <span data-i18n="booleans">booleans</span>
+                                </span>
+                            </div>
+                            <div class="summary-types">
+                                <span class="type-item" title="Objects">
+                                    <span class="type-icon">🗂️</span>
+                                    <span id="inputObjectCount">0</span> <span data-i18n="objects">objects</span>
+                                </span>
+                                <span class="type-item" title="Arrays">
+                                    <span class="type-icon">📋</span>
+                                    <span id="inputArrayCount">0</span> <span data-i18n="arrays">arrays</span>
+                                </span>
+                                <span class="type-item" title="Nulls">
+                                    <span class="type-icon">∅</span>
+                                    <span id="inputNullCount">0</span> <span data-i18n="nulls">nulls</span>
+                                </span>
+                            </div>
+                            <div class="summary-details">
+                                <span><span data-i18n="maxDepth">Max Depth</span>: <strong id="inputMaxDepth">0</strong></span>
+                                <span>•</span>
+                                <span><span data-i18n="totalKeys">Total Keys</span>: <strong id="inputTotalKeys">0</strong></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -271,6 +314,49 @@
                     <div class="panel-footer">
                         <span id="outputStats" class="stats"></span>
                         <span id="compressionRatio" class="compression-ratio"></span>
+                        <button id="outputSummaryToggle" class="summary-toggle" data-i18n-title="tooltipDataSummary">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            <span data-i18n="dataSummary">Data Summary</span>
+                        </button>
+                    </div>
+                    <div id="outputSummary" class="data-summary collapsed">
+                        <div class="summary-content">
+                            <div class="summary-types">
+                                <span class="type-item" title="Strings">
+                                    <span class="type-icon">📝</span>
+                                    <span id="outputStringCount">0</span> <span data-i18n="strings">strings</span>
+                                </span>
+                                <span class="type-item" title="Numbers">
+                                    <span class="type-icon">🔢</span>
+                                    <span id="outputNumberCount">0</span> <span data-i18n="numbers">numbers</span>
+                                </span>
+                                <span class="type-item" title="Booleans">
+                                    <span class="type-icon">✓</span>
+                                    <span id="outputBooleanCount">0</span> <span data-i18n="booleans">booleans</span>
+                                </span>
+                            </div>
+                            <div class="summary-types">
+                                <span class="type-item" title="Objects">
+                                    <span class="type-icon">🗂️</span>
+                                    <span id="outputObjectCount">0</span> <span data-i18n="objects">objects</span>
+                                </span>
+                                <span class="type-item" title="Arrays">
+                                    <span class="type-icon">📋</span>
+                                    <span id="outputArrayCount">0</span> <span data-i18n="arrays">arrays</span>
+                                </span>
+                                <span class="type-item" title="Nulls">
+                                    <span class="type-icon">∅</span>
+                                    <span id="outputNullCount">0</span> <span data-i18n="nulls">nulls</span>
+                                </span>
+                            </div>
+                            <div class="summary-details">
+                                <span><span data-i18n="maxDepth">Max Depth</span>: <strong id="outputMaxDepth">0</strong></span>
+                                <span>•</span>
+                                <span><span data-i18n="totalKeys">Total Keys</span>: <strong id="outputTotalKeys">0</strong></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
