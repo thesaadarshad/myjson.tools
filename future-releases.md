@@ -16,6 +16,79 @@ This document tracks planned features and enhancements for JSON Playground. Item
 
 ## ✅ Recently Completed Features
 
+### Escape/Unescape JSON Strings ✅
+**Status:** ✅ Completed  
+**Complexity:** Low  
+**Value:** Medium  
+**Completed:** October 12, 2025
+
+**Description:**
+- **Escape:** Convert text to JSON-safe string with proper escaping
+- **Unescape:** Restore original string from escaped JSON
+- Handles all JSON escape sequences (\n, \t, \", \\, etc.)
+- Unicode and special character support
+- Perfect for embedding strings within JSON
+
+**Key Features Delivered:**
+- Two separate operations: Escape and Unescape
+- Proper handling of quotes, newlines, backslashes, and control characters
+- Unicode character preservation
+- Safe for embedding in JSON string values
+- Full multilingual support across all 5 languages
+- Perfect for API debugging, log parsing, and string manipulation
+
+---
+
+### Flatten/Unflatten JSON ✅
+**Status:** ✅ Completed  
+**Complexity:** Low  
+**Value:** High  
+**Completed:** October 12, 2025
+
+**Description:**
+- **Flatten:** Convert nested JSON to dot notation `{"user": {"name": "John"}}` → `{"user.name": "John"}`
+- **Unflatten:** Rebuild nested structure from dot notation
+- Dot separator (.) for path notation
+- Handles nested objects, arrays, and primitives
+- Empty objects and arrays preserved
+- Automatic array index handling
+
+**Key Features Delivered:**
+- Two separate operations: Flatten and Unflatten
+- Recursive flattening of deeply nested structures
+- Smart array handling with numeric indices
+- Automatic structure detection during unflatten (arrays vs objects)
+- Full multilingual support across all 5 languages
+- Perfect for database operations, configuration management, and flat data structures
+
+---
+
+### JSON to CSV Converter ✅
+**Status:** ✅ Completed  
+**Complexity:** Medium  
+**Value:** Very High  
+**Completed:** October 12, 2025
+
+**Description:**
+- Convert JSON to CSV format with intelligent detection
+- **Array of objects** → Table format with auto-detected headers
+- **Single object** → Two-column format (key, value)
+- **Array of primitives** → Single-column format
+- Proper CSV escaping (commas, quotes, newlines, special characters)
+- Handles nested objects by JSON stringification
+- RFC 4180 compliant CSV output
+
+**Key Features Delivered:**
+- One-click JSON to CSV conversion
+- Smart format detection (array of objects, single object, primitives)
+- Proper CSV character escaping with quote handling
+- Perfect table format for Excel and Google Sheets
+- Full multilingual support across all 5 languages
+- Handles complex nested structures gracefully
+- Perfect for data analysis, spreadsheets, and exports
+
+---
+
 ### JSON to XML Converter ✅
 **Status:** ✅ Completed  
 **Complexity:** Medium  
@@ -150,20 +223,34 @@ These are the most impactful features recommended for near-term implementation.
 ## 🔄 Data Transformation Features
 
 ### 6. JSON to CSV Converter
-**Status:** ⏳ Planned  
+**Status:** ✅ Completed  
+**Completed:** October 12, 2025  
 **Complexity:** Medium  
 **Value:** Very High  
 
 **Description:**
-- Convert JSON arrays to CSV format
-- Auto-detect columns from object keys
-- Handle nested objects (flatten or ignore)
-- Support for custom delimiters
+- Convert JSON to CSV format with intelligent detection
+- **Array of objects** → Table format with auto-detected headers
+- **Single object** → Two-column format (key, value)
+- **Array of primitives** → Single-column format
+- Proper CSV escaping (commas, quotes, newlines, special characters)
+- Handles nested objects by JSON stringification
+- RFC 4180 compliant CSV output
+
+**Key Features Delivered:**
+- One-click JSON to CSV conversion
+- Smart format detection based on input structure
+- Proper CSV character escaping with quote handling
+- Perfect table format for Excel and Google Sheets
+- Full multilingual support across all 5 languages
+- Handles complex nested structures gracefully
 
 **Use Cases:**
-- Data analysis in spreadsheets
-- Export for non-technical users
-- Quick data sharing
+- Data analysis in Excel, Google Sheets, or other spreadsheet software
+- Export for non-technical users who prefer spreadsheets
+- Quick data sharing with business analysts
+- Converting API responses to tabular format
+- Importing JSON data into databases via CSV
 
 ---
 
@@ -198,37 +285,62 @@ These are the most impactful features recommended for near-term implementation.
 ---
 
 ### 8. Flatten/Unflatten JSON
-**Status:** ⏳ Planned  
+**Status:** ✅ Completed  
+**Completed:** October 12, 2025  
 **Complexity:** Low  
 **Value:** High  
 
 **Description:**
-- **Flatten:** `{"user": {"name": "John"}}` → `{"user.name": "John"}`
-- **Unflatten:** Reverse operation
-- Configurable delimiter (dot, underscore, etc.)
-- Handle arrays
+- **Flatten:** Convert nested JSON to dot notation `{"user": {"name": "John"}}` → `{"user.name": "John"}`
+- **Unflatten:** Rebuild nested structure from dot notation
+- Dot separator (.) for path notation
+- Handles nested objects, arrays, and primitives
+- Empty objects and arrays preserved
+- Automatic array index handling
+
+**Key Features Delivered:**
+- One-click flatten and unflatten operations
+- Recursive flattening of deeply nested structures
+- Smart array handling with numeric indices
+- Automatic structure detection during unflatten
+- Full multilingual support across all 5 languages
+- Perfect for database operations and configuration management
 
 **Use Cases:**
-- Database imports
-- Configuration management
-- Data processing pipelines
+- Database imports requiring flat structure
+- Configuration management and environment variables
+- Data processing pipelines and ETL operations
+- Working with key-value stores
+- Simplifying nested API responses
 
 ---
 
 ### 9. Escape/Unescape JSON Strings
-**Status:** ⏳ Planned  
+**Status:** ✅ Completed  
+**Completed:** October 12, 2025  
 **Complexity:** Low  
 **Value:** Medium  
 
 **Description:**
-- Escape JSON for embedding in strings
-- Unescape JSON strings back to objects
-- Handle double/triple escaping
+- **Escape:** Convert text to JSON-safe string with proper escaping
+- **Unescape:** Restore original string from escaped JSON
+- Handles all JSON escape sequences (\n, \t, \", \\, etc.)
+- Unicode and special character support
+- Perfect for embedding strings within JSON
+
+**Key Features Delivered:**
+- One-click escape and unescape operations
+- Proper handling of quotes, newlines, backslashes
+- Unicode character preservation
+- Safe for embedding in JSON string values
+- Full multilingual support across all 5 languages
 
 **Use Cases:**
-- API payload debugging
-- Log file analysis
-- String manipulation
+- Embedding JSON as string values within other JSON
+- API payload debugging and testing
+- Log file analysis and parsing
+- String manipulation for configuration files
+- Handling escaped data from APIs and databases
 
 ---
 
@@ -745,8 +857,8 @@ These are low-complexity features that can be added quickly:
 - Python Dataclass Generator
 
 ### Phase 3: Data Transformation (v1.3)
-- JSON to CSV
-- Flatten/Unflatten
+- ~~JSON to CSV~~ ✅ Completed
+- ~~Flatten/Unflatten~~ ✅ Completed
 - ~~JSON to XML~~ ✅ Completed
 - JSON Schema Generator
 - Data Type Summary

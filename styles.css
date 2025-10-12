@@ -429,11 +429,46 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
-    gap: var(--space-sm);
+    align-items: stretch;
+    gap: var(--space-lg);
     padding-top: calc(var(--space-xxl) + var(--space-xl));
     padding-bottom: var(--space-md);
-    min-width: 120px;
+    min-width: 150px;
+}
+
+/* Button Groups */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.button-group:hover {
+    border-color: var(--color-primary-light);
+    box-shadow: var(--shadow-sm);
+}
+
+.group-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-light);
+    text-align: center;
+    margin-bottom: var(--space-xs);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.group-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
 }
 
 /* Buttons */
@@ -501,6 +536,58 @@ button {
     background: var(--color-bg);
     color: var(--color-primary);
     border-color: var(--color-primary-light);
+}
+
+.btn-copy-to-input {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.btn-copy-to-input:hover {
+    background: var(--color-accent);
+    color: white;
+    border-color: var(--color-accent);
+    transform: translateX(-2px);
+}
+
+.btn-copy-to-input svg {
+    transition: transform var(--transition-fast);
+}
+
+.btn-copy-to-input:hover svg {
+    transform: translateX(-3px);
+}
+
+.btn-compact {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-sm);
+}
+
+.btn-compact span {
+    font-size: var(--font-size-sm);
+}
+
+/* Icon-only buttons */
+.btn-icon {
+    padding: var(--space-xs);
+    min-width: auto;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.btn-icon svg {
+    flex-shrink: 0;
+}
+
+.btn-icon:hover {
+    transform: translateY(-2px);
 }
 
 /* Compare Mode Layout */
@@ -898,6 +985,14 @@ footer {
         font-size: calc(var(--font-size-sm) * 0.9);
     }
     
+    .button-group {
+        padding: var(--space-sm);
+    }
+    
+    .group-label {
+        font-size: 10px;
+    }
+    
     .panel-header {
         flex-direction: column;
         align-items: flex-start;
@@ -907,6 +1002,27 @@ footer {
     .actions {
         width: 100%;
         justify-content: flex-end;
+        gap: var(--space-xs);
+    }
+    
+    .btn-compact span {
+        display: none;
+    }
+    
+    .btn-compact {
+        width: 36px;
+        padding: var(--space-xs);
+        justify-content: center;
+    }
+    
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .btn-icon svg {
+        width: 16px;
+        height: 16px;
     }
     
     .json-textarea {

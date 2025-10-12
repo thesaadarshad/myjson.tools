@@ -105,13 +105,18 @@ class JSONCompressor {
             });
         });
         
-        // Compression/Decompression/Beautify/Sort/TypeScript/YAML/XML buttons
+        // Compression/Decompression/Beautify/Sort/TypeScript/YAML/XML/CSV/Flatten/Unflatten/Escape/Unescape buttons
         addListener('compressBtn', 'click', () => this.compress());
         addListener('beautifyBtn', 'click', () => this.beautify());
         addListener('sortBtn', 'click', () => this.sortJSON());
         addListener('typescriptBtn', 'click', () => this.convertToTypeScript());
         addListener('yamlBtn', 'click', () => this.convertToYAML());
         addListener('xmlBtn', 'click', () => this.convertToXML());
+        addListener('csvBtn', 'click', () => this.convertToCSV());
+        addListener('flattenBtn', 'click', () => this.flattenJSON());
+        addListener('unflattenBtn', 'click', () => this.unflattenJSON());
+        addListener('escapeBtn', 'click', () => this.escapeJSON());
+        addListener('unescapeBtn', 'click', () => this.unescapeJSON());
         addListener('decompressBtn', 'click', () => this.decompress());
         
         // Input actions
@@ -121,6 +126,7 @@ class JSONCompressor {
         
         // Output actions
         addListener('copyBtn', 'click', () => this.copyToClipboard());
+        addListener('copyToInputBtn', 'click', () => this.copyOutputToInput());
         addListener('downloadBtn', 'click', () => this.downloadJSON());
         addListener('clearOutput', 'click', () => this.clearOutput());
         
@@ -641,6 +647,293 @@ class JSONCompressor {
     }
 
     /**
+     * Convert JSON to CSV format
+     */
+    convertToCSV() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToCsv'), 'error');
+            return;
+        }
+
+        try {
+            // Parse JSON to validate
+            const parsed = JSON.parse(input);
+            
+            // Convert to CSV
+            const csv = this.jsonToCSV(parsed);
+            
+            this.outputTextarea.value = csv;
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('csvSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
+            console.error('CSV conversion error:', error);
+        }
+    }
+
+    /**
+     * Convert JSON to CSV format
+     */
+    jsonToCSV(data) {
+        // Handle array of objects (most common case for CSV)
+        if (Array.isArray(data)) {
+            if (data.length === 0) {
+                return '';
+            }
+
+            // Get all unique keys from all objects
+            const allKeys = new Set();
+            data.forEach(item => {
+                if (typeof item === 'object' && item !== null && !Array.isArray(item)) {
+                    Object.keys(item).forEach(key => allKeys.add(key));
+                }
+            });
+
+            if (allKeys.size === 0) {
+                // Array of primitives
+                return 'value\n' + data.map(item => this.escapeCSV(this.formatCSVValue(item))).join('\n');
+            }
+
+            // Array of objects - create table
+            const keys = Array.from(allKeys);
+            const header = keys.map(key => this.escapeCSV(key)).join(',');
+            
+            const rows = data.map(item => {
+                return keys.map(key => {
+                    const value = item && typeof item === 'object' ? item[key] : undefined;
+                    return this.escapeCSV(this.formatCSVValue(value));
+                }).join(',');
+            });
+
+            return header + '\n' + rows.join('\n');
+        }
+
+        // Handle single object - create two-column CSV (key, value)
+        if (typeof data === 'object' && data !== null) {
+            const header = 'key,value';
+            const rows = Object.entries(data).map(([key, value]) => {
+                return this.escapeCSV(key) + ',' + this.escapeCSV(this.formatCSVValue(value));
+            });
+            return header + '\n' + rows.join('\n');
+        }
+
+        // Handle primitive value
+        return 'value\n' + this.escapeCSV(this.formatCSVValue(data));
+    }
+
+    /**
+     * Format a value for CSV output
+     */
+    formatCSVValue(value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+        if (typeof value === 'object') {
+            // For nested objects/arrays, stringify them
+            return JSON.stringify(value);
+        }
+        return String(value);
+    }
+
+    /**
+     * Escape a value for CSV format
+     */
+    escapeCSV(value) {
+        const str = String(value);
+        
+        // If the value contains comma, newline, or double quote, wrap in quotes
+        if (str.includes(',') || str.includes('\n') || str.includes('"') || str.includes('\r')) {
+            // Escape double quotes by doubling them
+            return '"' + str.replace(/"/g, '""') + '"';
+        }
+        
+        return str;
+    }
+
+    /**
+     * Flatten JSON to dot notation
+     */
+    flattenJSON() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToFlatten'), 'error');
+            return;
+        }
+
+        try {
+            // Parse JSON to validate
+            const parsed = JSON.parse(input);
+            
+            // Flatten the JSON
+            const flattened = this.flatten(parsed);
+            
+            this.outputTextarea.value = JSON.stringify(flattened, null, 2);
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('flattenSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
+            console.error('Flatten error:', error);
+        }
+    }
+
+    /**
+     * Flatten an object to dot notation
+     */
+    flatten(obj, prefix = '', separator = '.') {
+        const flattened = {};
+
+        const flattenHelper = (current, path) => {
+            if (current === null || current === undefined) {
+                flattened[path] = current;
+                return;
+            }
+
+            if (Array.isArray(current)) {
+                if (current.length === 0) {
+                    flattened[path] = [];
+                } else {
+                    current.forEach((item, index) => {
+                        flattenHelper(item, path ? `${path}${separator}${index}` : `${index}`);
+                    });
+                }
+            } else if (typeof current === 'object') {
+                const keys = Object.keys(current);
+                if (keys.length === 0) {
+                    flattened[path] = {};
+                } else {
+                    keys.forEach(key => {
+                        flattenHelper(current[key], path ? `${path}${separator}${key}` : key);
+                    });
+                }
+            } else {
+                flattened[path] = current;
+            }
+        };
+
+        flattenHelper(obj, prefix);
+        return flattened;
+    }
+
+    /**
+     * Unflatten JSON from dot notation
+     */
+    unflattenJSON() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToUnflatten'), 'error');
+            return;
+        }
+
+        try {
+            // Parse JSON to validate
+            const parsed = JSON.parse(input);
+            
+            // Unflatten the JSON
+            const unflattened = this.unflatten(parsed);
+            
+            this.outputTextarea.value = JSON.stringify(unflattened, null, 2);
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('unflattenSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
+            console.error('Unflatten error:', error);
+        }
+    }
+
+    /**
+     * Unflatten an object from dot notation
+     */
+    unflatten(obj, separator = '.') {
+        const result = {};
+
+        for (const [path, value] of Object.entries(obj)) {
+            const keys = path.split(separator);
+            let current = result;
+
+            for (let i = 0; i < keys.length; i++) {
+                const key = keys[i];
+                const isLast = i === keys.length - 1;
+
+                if (isLast) {
+                    current[key] = value;
+                } else {
+                    // Determine if next level should be array or object
+                    const nextKey = keys[i + 1];
+                    const isArrayIndex = /^\d+$/.test(nextKey);
+
+                    if (current[key] === undefined) {
+                        current[key] = isArrayIndex ? [] : {};
+                    }
+
+                    current = current[key];
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Escape JSON string
+     */
+    escapeJSON() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToEscape'), 'error');
+            return;
+        }
+
+        try {
+            // Simply escape the string to be JSON-safe
+            const escaped = JSON.stringify(input);
+            
+            // Remove the surrounding quotes that JSON.stringify adds
+            const result = escaped.slice(1, -1);
+            
+            this.outputTextarea.value = result;
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('escapeSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`${this.t('escapeError')}: ${error.message}`, 'error');
+            console.error('Escape error:', error);
+        }
+    }
+
+    /**
+     * Unescape JSON string
+     */
+    unescapeJSON() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToUnescape'), 'error');
+            return;
+        }
+
+        try {
+            // Wrap in quotes and parse to unescape
+            const unescaped = JSON.parse('"' + input + '"');
+            
+            this.outputTextarea.value = unescaped;
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('unescapeSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`${this.t('unescapeError')}: ${error.message}`, 'error');
+            console.error('Unescape error:', error);
+        }
+    }
+
+    /**
      * Convert JSON to TypeScript interfaces
      */
     convertToTypeScript() {
@@ -936,6 +1229,28 @@ class JSONCompressor {
             document.execCommand('copy');
             this.showNotification(this.t('copiedToClipboard'), 'success');
         }
+    }
+
+    /**
+     * Copy output to input for further processing
+     */
+    copyOutputToInput() {
+        const outputText = this.outputTextarea.value;
+        
+        if (!outputText) {
+            this.showNotification(this.t('nothingToCopyToInput'), 'error');
+            return;
+        }
+
+        // Copy output to input
+        this.inputTextarea.value = outputText;
+        
+        // Update line numbers and stats
+        this.updateLineNumbers();
+        this.updateStats();
+        
+        // Show success notification
+        this.showNotification(this.t('copiedToInput'), 'success');
     }
 
     /**

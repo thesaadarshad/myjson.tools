@@ -11,6 +11,11 @@ A minimalistic web application for transforming, formatting, and converting JSON
 - **TypeScript Interface Generator**: Auto-generate TypeScript interfaces from JSON
 - **JSON to YAML**: Convert JSON to YAML format with proper structure
 - **JSON to XML**: Convert JSON to XML format with proper tag structure
+- **JSON to CSV**: Convert JSON to CSV format for Excel and data analysis
+- **Flatten JSON**: Convert nested JSON to dot notation for easier processing
+- **Unflatten JSON**: Rebuild nested structure from flattened dot notation
+- **Escape Strings**: Escape special characters for safe JSON string embedding
+- **Unescape Strings**: Restore original strings from escaped JSON
 
 ### Compare Mode
 - **JSON Diff/Compare**: Compare two JSON objects side-by-side and see detailed differences
@@ -108,7 +113,44 @@ docker-compose down
    - Handles nested objects, arrays, and special XML characters
    - Perfect for API integrations, data exchange, and legacy systems
 
-7. **Dark Mode**:
+7. **JSON to CSV**:
+   - Paste JSON in the left panel
+   - Click the "CSV" button (grid icon)
+   - CSV output appears in the right panel
+   - **Array of objects** → Table format with headers (perfect for Excel)
+   - **Single object** → Two-column format (key, value)
+   - Proper CSV escaping (commas, quotes, newlines)
+   - Perfect for data analysis, Excel imports, and spreadsheets
+
+8. **Flatten JSON**:
+   - Paste nested JSON in the left panel
+   - Click the "Flatten" button (minimize icon)
+   - Flattened JSON with dot notation appears in the right panel
+   - Example: `{"user": {"name": "John"}}` → `{"user.name": "John"}`
+   - Perfect for working with databases, configuration files, and flat structures
+
+9. **Unflatten JSON**:
+   - Paste flattened JSON with dot notation in the left panel
+   - Click the "Unflatten" button (expand icon)
+   - Nested JSON structure is rebuilt in the right panel
+   - Example: `{"user.name": "John"}` → `{"user": {"name": "John"}}`
+   - Automatically handles arrays and nested objects
+
+10. **Escape String**:
+   - Paste any text or JSON string in the left panel
+   - Click the "Escape" button
+   - String with escaped characters appears in the right panel
+   - Example: `Hello "World"` → `Hello \"World\"`
+   - Perfect for embedding strings inside JSON values
+
+11. **Unescape String**:
+   - Paste escaped JSON string in the left panel
+   - Click the "Unescape" button
+   - Original string is restored in the right panel
+   - Example: `Hello \"World\"` → `Hello "World"`
+   - Handles all JSON escape sequences (\n, \t, \\, etc.)
+
+12. **Dark Mode**:
    - Click the sun/moon icon in the header to toggle themes
    - Your preference is saved automatically
 

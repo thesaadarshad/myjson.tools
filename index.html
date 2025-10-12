@@ -66,9 +66,26 @@
                     <div class="panel-header">
                         <h2 data-i18n="inputTitle">Input JSON</h2>
                         <div class="actions">
-                            <button id="clearInput" class="btn-secondary" data-i18n="clearInput" data-i18n-title="tooltipClearInput">Clear</button>
-                            <button id="pasteBtn" class="btn-secondary" data-i18n="paste" data-i18n-title="tooltipPaste">Paste</button>
-                            <button id="loadSample" class="btn-secondary" data-i18n="sample" data-i18n-title="tooltipSample">Sample</button>
+                            <button id="pasteBtn" class="btn-icon btn-secondary" data-i18n-title="tooltipPaste" aria-label="Paste">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                </svg>
+                            </button>
+                            <button id="loadSample" class="btn-icon btn-secondary" data-i18n-title="tooltipSample" aria-label="Load sample">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                                </svg>
+                            </button>
+                            <button id="clearInput" class="btn-icon btn-secondary" data-i18n-title="tooltipClearInput" aria-label="Clear">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                     <div class="textarea-wrapper">
@@ -87,64 +104,157 @@
                 </div>
 
                 <div class="control-center">
-                    <button id="compressBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipCompress">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                            <line x1="8" y1="12" x2="16" y2="12"></line>
-                            <line x1="12" y1="8" x2="12" y2="16"></line>
-                            <circle cx="12" cy="12" r="1" fill="currentColor"></circle>
-                        </svg>
-                        <span class="btn-label" data-i18n="compress">Compress</span>
-                    </button>
-                    <button id="beautifyBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipBeautify">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                        </svg>
-                        <span class="btn-label" data-i18n="beautify">Beautify</span>
-                    </button>
-                    <button id="sortBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipSort">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="4" y1="9" x2="20" y2="9"></line>
-                            <line x1="4" y1="15" x2="20" y2="15"></line>
-                            <line x1="10" y1="3" x2="8" y2="21"></line>
-                            <line x1="16" y1="3" x2="14" y2="21"></line>
-                        </svg>
-                        <span class="btn-label" data-i18n="sort">Sort</span>
-                    </button>
-                    <button id="typescriptBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipTypescript">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                            <path d="M8 8h5"></path>
-                            <path d="M10 8v8"></path>
-                            <path d="M14 12h3"></path>
-                            <path d="M14 16h2"></path>
-                        </svg>
-                        <span class="btn-label" data-i18n="typescript">TypeScript</span>
-                    </button>
-                    <button id="yamlBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipYaml">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="16 18 22 12 16 6"></polyline>
-                            <polyline points="8 6 2 12 8 18"></polyline>
-                        </svg>
-                        <span class="btn-label" data-i18n="yaml">YAML</span>
-                    </button>
-                    <button id="xmlBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipXml">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="9" y1="15" x2="15" y2="15"></line>
-                        </svg>
-                        <span class="btn-label" data-i18n="xml">XML</span>
-                    </button>
+                    <!-- Format & Structure Group -->
+                    <div class="button-group">
+                        <div class="group-label" data-i18n="groupFormat">Format</div>
+                        <div class="group-buttons">
+                            <button id="compressBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipCompress">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                                    <circle cx="12" cy="12" r="1" fill="currentColor"></circle>
+                                </svg>
+                                <span class="btn-label" data-i18n="compress">Compress</span>
+                            </button>
+                            <button id="beautifyBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipBeautify">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                </svg>
+                                <span class="btn-label" data-i18n="beautify">Beautify</span>
+                            </button>
+                            <button id="sortBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipSort">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="4" y1="9" x2="20" y2="9"></line>
+                                    <line x1="4" y1="15" x2="20" y2="15"></line>
+                                    <line x1="10" y1="3" x2="8" y2="21"></line>
+                                    <line x1="16" y1="3" x2="14" y2="21"></line>
+                                </svg>
+                                <span class="btn-label" data-i18n="sort">Sort</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Nested/Flat Group -->
+                    <div class="button-group">
+                        <div class="group-label" data-i18n="groupNested">Nested/Flat</div>
+                        <div class="group-buttons">
+                            <button id="flattenBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipFlatten">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="4 14 10 14 10 20"></polyline>
+                                    <polyline points="20 10 14 10 14 4"></polyline>
+                                    <line x1="14" y1="10" x2="21" y2="3"></line>
+                                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                                </svg>
+                                <span class="btn-label" data-i18n="flatten">Flatten</span>
+                            </button>
+                            <button id="unflattenBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipUnflatten">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="10 14 4 14 4 20"></polyline>
+                                    <polyline points="14 10 20 10 20 4"></polyline>
+                                    <line x1="20" y1="10" x2="13" y2="3"></line>
+                                    <line x1="4" y1="14" x2="11" y2="21"></line>
+                                </svg>
+                                <span class="btn-label" data-i18n="unflatten">Unflatten</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- String Operations Group -->
+                    <div class="button-group">
+                        <div class="group-label" data-i18n="groupString">String</div>
+                        <div class="group-buttons">
+                            <button id="escapeBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipEscape">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10 15l-3-3 3-3"></path>
+                                    <path d="M14 9l3 3-3 3"></path>
+                                    <line x1="18" y1="3" x2="6" y2="21"></line>
+                                </svg>
+                                <span class="btn-label" data-i18n="escape">Escape</span>
+                            </button>
+                            <button id="unescapeBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipUnescape">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 15l3-3-3-3"></path>
+                                    <path d="M10 9l-3 3 3 3"></path>
+                                    <line x1="6" y1="3" x2="18" y2="21"></line>
+                                </svg>
+                                <span class="btn-label" data-i18n="unescape">Unescape</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Converters Group -->
+                    <div class="button-group">
+                        <div class="group-label" data-i18n="groupConverters">Converters</div>
+                        <div class="group-buttons">
+                            <button id="typescriptBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipTypescript">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                    <path d="M8 8h5"></path>
+                                    <path d="M10 8v8"></path>
+                                    <path d="M14 12h3"></path>
+                                    <path d="M14 16h2"></path>
+                                </svg>
+                                <span class="btn-label" data-i18n="typescript">TypeScript</span>
+                            </button>
+                            <button id="yamlBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipYaml">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="16 18 22 12 16 6"></polyline>
+                                    <polyline points="8 6 2 12 8 18"></polyline>
+                                </svg>
+                                <span class="btn-label" data-i18n="yaml">YAML</span>
+                            </button>
+                            <button id="xmlBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipXml">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                                </svg>
+                                <span class="btn-label" data-i18n="xml">XML</span>
+                            </button>
+                            <button id="csvBtn" class="btn-primary btn-icon-only" data-i18n-title="tooltipCsv">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                                    <line x1="3" y1="15" x2="21" y2="15"></line>
+                                    <line x1="9" y1="3" x2="9" y2="21"></line>
+                                    <line x1="15" y1="3" x2="15" y2="21"></line>
+                                </svg>
+                                <span class="btn-label" data-i18n="csv">CSV</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="panel output-panel">
                     <div class="panel-header">
                         <h2 data-i18n="outputTitle">Output JSON</h2>
                         <div class="actions">
-                            <button id="copyBtn" class="btn-secondary" data-i18n="copy" data-i18n-title="tooltipCopy">Copy</button>
-                            <button id="downloadBtn" class="btn-secondary" data-i18n="download" data-i18n-title="tooltipDownload">Download</button>
-                            <button id="clearOutput" class="btn-secondary" data-i18n="clearOutput" data-i18n-title="tooltipClearOutput">Clear</button>
+                            <button id="copyToInputBtn" class="btn-secondary btn-copy-to-input btn-compact" data-i18n-title="tooltipCopyToInput">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                                <span data-i18n="copyToInput">Copy to Input</span>
+                            </button>
+                            <button id="copyBtn" class="btn-icon btn-secondary" data-i18n-title="tooltipCopy" aria-label="Copy to clipboard">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                            <button id="downloadBtn" class="btn-icon btn-secondary" data-i18n-title="tooltipDownload" aria-label="Download">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                            </button>
+                            <button id="clearOutput" class="btn-icon btn-secondary" data-i18n-title="tooltipClearOutput" aria-label="Clear">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                     <div class="textarea-wrapper">
@@ -207,8 +317,18 @@
                             <div class="panel-header">
                                 <h2 data-i18n="jsonA">JSON A (Original)</h2>
                                 <div class="actions">
-                                    <button id="clearJsonA" class="btn-secondary" data-i18n="clear" data-i18n-title="tooltipClear">Clear</button>
-                                    <button id="pasteJsonA" class="btn-secondary" data-i18n="paste" data-i18n-title="tooltipPaste">Paste</button>
+                                    <button id="pasteJsonA" class="btn-icon btn-secondary" data-i18n-title="tooltipPaste" aria-label="Paste">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                        </svg>
+                                    </button>
+                                    <button id="clearJsonA" class="btn-icon btn-secondary" data-i18n-title="tooltipClear" aria-label="Clear">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                             <div class="textarea-wrapper">
@@ -247,8 +367,18 @@
                             <div class="panel-header">
                                 <h2 data-i18n="jsonB">JSON B (Modified)</h2>
                                 <div class="actions">
-                                    <button id="clearJsonB" class="btn-secondary" data-i18n="clear" data-i18n-title="tooltipClear">Clear</button>
-                                    <button id="pasteJsonB" class="btn-secondary" data-i18n="paste" data-i18n-title="tooltipPaste">Paste</button>
+                                    <button id="pasteJsonB" class="btn-icon btn-secondary" data-i18n-title="tooltipPaste" aria-label="Paste">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                        </svg>
+                                    </button>
+                                    <button id="clearJsonB" class="btn-icon btn-secondary" data-i18n-title="tooltipClear" aria-label="Clear">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                             <div class="textarea-wrapper">
@@ -269,8 +399,18 @@
                         <div class="panel-header">
                             <h3 data-i18n="diffDetails">Difference Details</h3>
                             <div class="actions">
-                                <button id="copyDiff" class="btn-secondary" data-i18n="copy" data-i18n-title="tooltipCopy">Copy</button>
-                                <button id="closeDiffPanel" class="btn-secondary">✕</button>
+                                <button id="copyDiff" class="btn-icon btn-secondary" data-i18n-title="tooltipCopy" aria-label="Copy">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                </button>
+                                <button id="closeDiffPanel" class="btn-icon btn-secondary" aria-label="Close">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                         <div id="diffResult" class="diff-result">
