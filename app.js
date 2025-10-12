@@ -163,6 +163,7 @@ class JSONCompressor {
         // Input actions
         addListener('clearInput', 'click', () => this.clearInput());
         addListener('pasteBtn', 'click', () => this.pasteFromClipboard());
+        addListener('importUrlBtn', 'click', () => this.openUrlImportModal());
         addListener('loadSample', 'click', () => this.loadSample());
         
         // Output actions
@@ -240,6 +241,41 @@ class JSONCompressor {
         if (this.themeToggle) {
             this.themeToggle.addEventListener('click', () => this.toggleTheme());
             console.log('Theme toggle listener added');
+        }
+        
+        // URL Import Modal
+        addListener('closeUrlModal', 'click', () => this.closeUrlImportModal());
+        addListener('cancelUrlImport', 'click', () => this.closeUrlImportModal());
+        addListener('confirmUrlImport', 'click', () => this.importFromUrl());
+        
+        // Close modal on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('urlImportModal');
+                if (modal && modal.classList.contains('active')) {
+                    this.closeUrlImportModal();
+                }
+            }
+        });
+        
+        // Close modal on backdrop click
+        const urlModal = document.getElementById('urlImportModal');
+        if (urlModal) {
+            urlModal.addEventListener('click', (e) => {
+                if (e.target === urlModal) {
+                    this.closeUrlImportModal();
+                }
+            });
+        }
+        
+        // Submit on Enter in URL input
+        const urlInput = document.getElementById('urlInput');
+        if (urlInput) {
+            urlInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    this.importFromUrl();
+                }
+            });
         }
         
         // Data Summary toggles
@@ -1964,6 +2000,124 @@ class JSONCompressor {
         this.updateStats();
         this.updateLineNumbers();
         this.showNotification(this.t('sampleLoaded'), 'success');
+    }
+
+    /**
+     * Open URL import modal
+     */
+    openUrlImportModal() {
+        const modal = document.getElementById('urlImportModal');
+        const urlInput = document.getElementById('urlInput');
+        
+        if (modal && urlInput) {
+            modal.classList.add('active');
+            // Clear previous input and focus
+            urlInput.value = '';
+            setTimeout(() => urlInput.focus(), 100);
+        }
+    }
+
+    /**
+     * Close URL import modal
+     */
+    closeUrlImportModal() {
+        const modal = document.getElementById('urlImportModal');
+        const urlInput = document.getElementById('urlInput');
+        
+        if (modal) {
+            modal.classList.remove('active');
+        }
+        
+        if (urlInput) {
+            urlInput.value = '';
+        }
+    }
+
+    /**
+     * Import JSON from URL
+     */
+    async importFromUrl() {
+        const urlInput = document.getElementById('urlInput');
+        const url = urlInput?.value.trim();
+        
+        if (!url) {
+            this.showNotification(this.t('enterValidUrl'), 'error');
+            return;
+        }
+        
+        // Basic URL validation
+        try {
+            new URL(url);
+        } catch (error) {
+            this.showNotification(this.t('invalidUrl'), 'error');
+            return;
+        }
+        
+        // Show loading state
+        const confirmBtn = document.getElementById('confirmUrlImport');
+        const originalText = confirmBtn?.textContent;
+        if (confirmBtn) {
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = this.t('importing') || 'Importing...';
+        }
+        
+        try {
+            // Fetch JSON from URL
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            // Check content type
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                // Try to parse anyway, but warn user
+                console.warn('Response is not JSON content-type:', contentType);
+            }
+            
+            // Parse response
+            const data = await response.json();
+            
+            // Load into input textarea
+            this.inputTextarea.value = JSON.stringify(data, null, 2);
+            this.updateStats();
+            this.updateLineNumbers();
+            this.updateDataSummary('input');
+            this.validateJSON('input');
+            
+            // Close modal and show success
+            this.closeUrlImportModal();
+            this.showNotification(this.t('importedFromUrl'), 'success');
+            
+        } catch (error) {
+            console.error('Error importing from URL:', error);
+            
+            // Determine error type and show appropriate message
+            let errorMessage = this.t('importError');
+            
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                errorMessage = this.t('corsError');
+            } else if (error instanceof SyntaxError) {
+                errorMessage = this.t('invalidJsonResponse');
+            } else if (error.message.includes('HTTP')) {
+                errorMessage = `${this.t('httpError')} ${error.message}`;
+            }
+            
+            this.showNotification(errorMessage, 'error');
+            
+        } finally {
+            // Reset button state
+            if (confirmBtn && originalText) {
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = originalText;
+            }
+        }
     }
 
     /**
