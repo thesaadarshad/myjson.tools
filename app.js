@@ -20,7 +20,13 @@ class JSONCompressor {
             notification: 'notification',
             languageSelect: 'languageSelect',
             themeToggle: 'themeToggle',
-            themeIcon: 'themeIcon'
+            themeIcon: 'themeIcon',
+            // Compare mode elements
+            jsonATextarea: 'jsonA',
+            jsonBTextarea: 'jsonB',
+            jsonALineNumbers: 'jsonALineNumbers',
+            jsonBLineNumbers: 'jsonBLineNumbers',
+            diffResult: 'diffResult'
         };
         
         // Try to get each element and log results
@@ -56,10 +62,19 @@ class JSONCompressor {
         // Initialize theme
         this.currentTheme = localStorage.getItem('json-compressor-theme') || 'light';
         
+        // Initialize mode
+        this.currentMode = localStorage.getItem('json-compressor-mode') || 'transform';
+        
+        // Initialize diff tracking
+        this.allDifferences = [];
+        this.currentDiffIndex = -1;
+        this.diffLineMap = { jsonA: {}, jsonB: {} };
+        
         try {
             this.initializeEventListeners();
             this.setTheme(this.currentTheme);
             this.setLanguage(this.currentLanguage);
+            this.switchMode(this.currentMode);
             this.updateStats();
             this.updateLineNumbers();
             console.log('JSONCompressor initialized successfully');
@@ -82,11 +97,21 @@ class JSONCompressor {
             }
         };
         
-        // Compression/Decompression/Beautify/Sort/YAML buttons
+        // Mode switching buttons
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const mode = e.currentTarget.getAttribute('data-mode');
+                this.switchMode(mode);
+            });
+        });
+        
+        // Compression/Decompression/Beautify/Sort/TypeScript/YAML/XML buttons
         addListener('compressBtn', 'click', () => this.compress());
         addListener('beautifyBtn', 'click', () => this.beautify());
         addListener('sortBtn', 'click', () => this.sortJSON());
+        addListener('typescriptBtn', 'click', () => this.convertToTypeScript());
         addListener('yamlBtn', 'click', () => this.convertToYAML());
+        addListener('xmlBtn', 'click', () => this.convertToXML());
         addListener('decompressBtn', 'click', () => this.decompress());
         
         // Input actions
@@ -98,6 +123,20 @@ class JSONCompressor {
         addListener('copyBtn', 'click', () => this.copyToClipboard());
         addListener('downloadBtn', 'click', () => this.downloadJSON());
         addListener('clearOutput', 'click', () => this.clearOutput());
+        
+        // Compare mode actions
+        addListener('compareBtn', 'click', () => this.compareJSON());
+        addListener('swapBtn', 'click', () => this.swapJSON());
+        addListener('clearJsonA', 'click', () => this.clearJsonA());
+        addListener('clearJsonB', 'click', () => this.clearJsonB());
+        addListener('pasteJsonA', 'click', () => this.pasteJsonA());
+        addListener('pasteJsonB', 'click', () => this.pasteJsonB());
+        addListener('copyDiff', 'click', () => this.copyDiff());
+        addListener('clearDiff', 'click', () => this.clearDiff());
+        addListener('toggleDiffPanel', 'click', () => this.toggleDiffPanel());
+        addListener('closeDiffPanel', 'click', () => this.toggleDiffPanel());
+        addListener('nextDiff', 'click', () => this.navigateDiff('next'));
+        addListener('prevDiff', 'click', () => this.navigateDiff('prev'));
         
         // Update stats and line numbers on input
         this.inputTextarea.addEventListener('input', () => {
@@ -112,6 +151,16 @@ class JSONCompressor {
         // Synchronize scroll between textarea and line numbers
         this.inputTextarea.addEventListener('scroll', () => this.syncScroll(this.inputTextarea, this.inputLineNumbers));
         this.outputTextarea.addEventListener('scroll', () => this.syncScroll(this.outputTextarea, this.outputLineNumbers));
+        
+        // Compare mode text areas
+        if (this.jsonATextarea) {
+            this.jsonATextarea.addEventListener('input', () => this.updateCompareLineNumbers());
+            this.jsonATextarea.addEventListener('scroll', () => this.syncScroll(this.jsonATextarea, this.jsonALineNumbers));
+        }
+        if (this.jsonBTextarea) {
+            this.jsonBTextarea.addEventListener('input', () => this.updateCompareLineNumbers());
+            this.jsonBTextarea.addEventListener('scroll', () => this.syncScroll(this.jsonBTextarea, this.jsonBLineNumbers));
+        }
         
         // Language selector and theme toggle
         if (this.languageSelect) {
@@ -478,6 +527,291 @@ class JSONCompressor {
     }
 
     /**
+     * Convert JSON to XML format
+     */
+    convertToXML() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToXml'), 'error');
+            return;
+        }
+
+        try {
+            // Parse JSON to validate
+            const parsed = JSON.parse(input);
+            
+            // Convert to XML
+            const xml = this.jsonToXML(parsed);
+            
+            this.outputTextarea.value = xml;
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('xmlSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
+            console.error('XML conversion error:', error);
+        }
+    }
+
+    /**
+     * Convert JSON object to XML format
+     */
+    jsonToXML(obj, rootName = 'root', indent = 0) {
+        const spaces = '  '.repeat(indent);
+        let xml = '';
+
+        // Handle null
+        if (obj === null) {
+            return `${spaces}<${rootName}></${rootName}>`;
+        }
+
+        // Handle primitives (string, number, boolean)
+        if (typeof obj !== 'object') {
+            const escapedValue = this.escapeXML(String(obj));
+            return `${spaces}<${rootName}>${escapedValue}</${rootName}>`;
+        }
+
+        // Handle arrays
+        if (Array.isArray(obj)) {
+            obj.forEach((item, index) => {
+                const itemName = this.singularize(rootName) || 'item';
+                xml += this.jsonToXML(item, itemName, indent) + '\n';
+            });
+            return xml.trimEnd();
+        }
+
+        // Handle objects
+        xml += `${spaces}<${rootName}>\n`;
+        
+        for (const [key, value] of Object.entries(obj)) {
+            const safeKey = this.sanitizeXMLTagName(key);
+            
+            if (value === null) {
+                xml += `${spaces}  <${safeKey}></${safeKey}>\n`;
+            } else if (Array.isArray(value)) {
+                if (value.length === 0) {
+                    xml += `${spaces}  <${safeKey}></${safeKey}>\n`;
+                } else {
+                    xml += `${spaces}  <${safeKey}>\n`;
+                    value.forEach((item) => {
+                        const itemName = this.singularize(safeKey) || 'item';
+                        xml += this.jsonToXML(item, itemName, indent + 2) + '\n';
+                    });
+                    xml += `${spaces}  </${safeKey}>\n`;
+                }
+            } else if (typeof value === 'object') {
+                xml += this.jsonToXML(value, safeKey, indent + 1) + '\n';
+            } else {
+                const escapedValue = this.escapeXML(String(value));
+                xml += `${spaces}  <${safeKey}>${escapedValue}</${safeKey}>\n`;
+            }
+        }
+        
+        xml += `${spaces}</${rootName}>`;
+        return xml;
+    }
+
+    /**
+     * Escape special XML characters
+     */
+    escapeXML(str) {
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;');
+    }
+
+    /**
+     * Sanitize string to be a valid XML tag name
+     */
+    sanitizeXMLTagName(str) {
+        // Replace invalid characters with underscores
+        // XML tag names must start with letter or underscore
+        let sanitized = str.replace(/[^a-zA-Z0-9_-]/g, '_');
+        
+        // Ensure it starts with a letter or underscore
+        if (!/^[a-zA-Z_]/.test(sanitized)) {
+            sanitized = '_' + sanitized;
+        }
+        
+        return sanitized;
+    }
+
+    /**
+     * Convert JSON to TypeScript interfaces
+     */
+    convertToTypeScript() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToTypescript'), 'error');
+            return;
+        }
+
+        try {
+            // Parse JSON to validate
+            const parsed = JSON.parse(input);
+            
+            // Generate TypeScript interfaces
+            const interfaces = this.generateTypeScriptInterfaces(parsed);
+            
+            this.outputTextarea.value = interfaces;
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('typescriptSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
+            console.error('TypeScript conversion error:', error);
+        }
+    }
+
+    /**
+     * Generate TypeScript interfaces from JSON object
+     */
+    generateTypeScriptInterfaces(obj, interfaceName = 'Root') {
+        const interfaces = new Map();
+        const seenTypes = new Set();
+        
+        // Analyze the object and collect all interface definitions
+        this.analyzeAndCollectInterfaces(obj, interfaceName, interfaces, seenTypes);
+        
+        // Convert collected interfaces to TypeScript code
+        let typescript = '';
+        for (const [name, properties] of interfaces) {
+            typescript += `interface ${name} {\n`;
+            for (const [propName, propType] of Object.entries(properties)) {
+                typescript += `  ${propName}: ${propType};\n`;
+            }
+            typescript += `}\n\n`;
+        }
+        
+        return typescript.trim();
+    }
+
+    /**
+     * Analyze JSON and collect interface definitions
+     */
+    analyzeAndCollectInterfaces(obj, interfaceName, interfaces, seenTypes) {
+        if (obj === null || typeof obj !== 'object') {
+            return this.getTypeName(obj);
+        }
+
+        if (Array.isArray(obj)) {
+            if (obj.length === 0) {
+                return 'any[]';
+            }
+            
+            // Analyze array elements
+            const elementTypes = new Set();
+            obj.forEach(item => {
+                const itemType = this.analyzeAndCollectInterfaces(item, interfaceName + 'Item', interfaces, seenTypes);
+                elementTypes.add(itemType);
+            });
+            
+            // Create union type if multiple types exist
+            if (elementTypes.size === 1) {
+                return `${Array.from(elementTypes)[0]}[]`;
+            } else {
+                return `(${Array.from(elementTypes).join(' | ')})[]`;
+            }
+        }
+
+        // It's an object - create an interface for it
+        if (!interfaces.has(interfaceName)) {
+            const properties = {};
+            
+            for (const [key, value] of Object.entries(obj)) {
+                if (value === null) {
+                    properties[key] = 'null';
+                } else if (Array.isArray(value)) {
+                    if (value.length === 0) {
+                        properties[key] = 'any[]';
+                    } else {
+                        // Check if array contains objects
+                        const firstNonNull = value.find(item => item !== null);
+                        if (firstNonNull && typeof firstNonNull === 'object' && !Array.isArray(firstNonNull)) {
+                            // Array of objects - create interface for the object
+                            const childInterfaceName = this.capitalize(this.singularize(key));
+                            const arrayType = this.analyzeAndCollectInterfaces(firstNonNull, childInterfaceName, interfaces, seenTypes);
+                            properties[key] = `${childInterfaceName}[]`;
+                        } else {
+                            // Array of primitives or mixed
+                            const types = new Set();
+                            value.forEach(item => {
+                                types.add(this.getTypeName(item));
+                            });
+                            if (types.size === 1) {
+                                properties[key] = `${Array.from(types)[0]}[]`;
+                            } else {
+                                properties[key] = `(${Array.from(types).join(' | ')})[]`;
+                            }
+                        }
+                    }
+                } else if (typeof value === 'object') {
+                    // Nested object - create interface for it
+                    const childInterfaceName = this.capitalize(key);
+                    this.analyzeAndCollectInterfaces(value, childInterfaceName, interfaces, seenTypes);
+                    properties[key] = childInterfaceName;
+                } else {
+                    // Primitive type
+                    properties[key] = this.getTypeName(value);
+                }
+            }
+            
+            interfaces.set(interfaceName, properties);
+        }
+        
+        return interfaceName;
+    }
+
+    /**
+     * Get TypeScript type name for a JavaScript value
+     */
+    getTypeName(value) {
+        if (value === null) return 'null';
+        if (value === undefined) return 'undefined';
+        if (Array.isArray(value)) return 'any[]';
+        
+        const type = typeof value;
+        if (type === 'object') return 'object';
+        if (type === 'string') return 'string';
+        if (type === 'number') return 'number';
+        if (type === 'boolean') return 'boolean';
+        
+        return 'any';
+    }
+
+    /**
+     * Capitalize first letter of a string
+     */
+    capitalize(str) {
+        if (!str) return 'Item';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    /**
+     * Convert plural to singular (simple heuristic)
+     */
+    singularize(str) {
+        if (!str) return str;
+        
+        // Simple pluralization rules
+        if (str.endsWith('ies')) {
+            return str.slice(0, -3) + 'y';
+        }
+        if (str.endsWith('es')) {
+            return str.slice(0, -2);
+        }
+        if (str.endsWith('s')) {
+            return str.slice(0, -1);
+        }
+        return str;
+    }
+
+    /**
      * Decompress JSON - formats with proper indentation
      */
     decompress() {
@@ -726,13 +1060,568 @@ class JSONCompressor {
     }
 
     /**
+     * Switch between Transform and Compare modes
+     */
+    switchMode(mode) {
+        this.currentMode = mode;
+        localStorage.setItem('json-compressor-mode', mode);
+        
+        // Update mode button states
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            if (btn.getAttribute('data-mode') === mode) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        
+        // Show/hide mode content
+        const transformMode = document.getElementById('transformMode');
+        const compareMode = document.getElementById('compareMode');
+        
+        if (mode === 'transform') {
+            if (transformMode) transformMode.classList.add('active');
+            if (compareMode) compareMode.classList.remove('active');
+        } else if (mode === 'compare') {
+            if (transformMode) transformMode.classList.remove('active');
+            if (compareMode) compareMode.classList.add('active');
+            // Update line numbers for compare mode
+            this.updateCompareLineNumbers();
+        }
+    }
+
+    /**
+     * Update line numbers for compare mode textareas
+     */
+    updateCompareLineNumbers() {
+        if (this.jsonATextarea && this.jsonALineNumbers) {
+            const lines = this.jsonATextarea.value.split('\n').length;
+            this.jsonALineNumbers.innerHTML = Array.from({length: lines}, (_, i) => `<div>${i + 1}</div>`).join('');
+        }
+        if (this.jsonBTextarea && this.jsonBLineNumbers) {
+            const lines = this.jsonBTextarea.value.split('\n').length;
+            this.jsonBLineNumbers.innerHTML = Array.from({length: lines}, (_, i) => `<div>${i + 1}</div>`).join('');
+        }
+    }
+
+    /**
+     * Compare two JSON objects and display differences
+     */
+    compareJSON() {
+        try {
+            const jsonAText = this.jsonATextarea.value.trim();
+            const jsonBText = this.jsonBTextarea.value.trim();
+            
+            if (!jsonAText || !jsonBText) {
+                this.showNotification('Please enter JSON in both fields', 'error');
+                return;
+            }
+            
+            // Parse and format both JSONs
+            const jsonA = JSON.parse(jsonAText);
+            const jsonB = JSON.parse(jsonBText);
+            
+            const formattedA = JSON.stringify(jsonA, null, 2);
+            const formattedB = JSON.stringify(jsonB, null, 2);
+            
+            // Update textareas with formatted JSON
+            this.jsonATextarea.value = formattedA;
+            this.jsonBTextarea.value = formattedB;
+            
+            // Find differences
+            this.allDifferences = this.findDifferences(jsonA, jsonB);
+            this.currentDiffIndex = -1;
+            
+            // Build line map for highlighting
+            this.buildLineMap(jsonA, jsonB, formattedA, formattedB);
+            
+            // Update UI
+            this.updateCompareLineNumbers();
+            this.highlightDiffLines();
+            this.updateDiffSummary();
+            this.displayDiff(this.allDifferences);
+            
+            // Show diff summary
+            const diffSummary = document.getElementById('diffSummary');
+            if (diffSummary) {
+                diffSummary.classList.remove('hidden');
+            }
+            
+            this.showNotification('Comparison complete!', 'success');
+        } catch (error) {
+            this.showNotification(`Error: ${error.message}`, 'error');
+        }
+    }
+
+    /**
+     * Find differences between two JSON objects
+     */
+    findDifferences(objA, objB, path = '') {
+        const diffs = [];
+        
+        // Get all unique keys from both objects
+        const allKeys = new Set([
+            ...Object.keys(objA || {}),
+            ...Object.keys(objB || {})
+        ]);
+        
+        for (const key of allKeys) {
+            const currentPath = path ? `${path}.${key}` : key;
+            const valueA = objA ? objA[key] : undefined;
+            const valueB = objB ? objB[key] : undefined;
+            
+            const typeA = this.getType(valueA);
+            const typeB = this.getType(valueB);
+            
+            if (valueA === undefined) {
+                diffs.push({
+                    type: 'added',
+                    path: currentPath,
+                    value: valueB
+                });
+            } else if (valueB === undefined) {
+                diffs.push({
+                    type: 'removed',
+                    path: currentPath,
+                    value: valueA
+                });
+            } else if (typeA === 'object' && typeB === 'object') {
+                // Recursively compare objects
+                diffs.push(...this.findDifferences(valueA, valueB, currentPath));
+            } else if (typeA === 'array' && typeB === 'array') {
+                // Compare arrays
+                const arrayDiffs = this.compareArrays(valueA, valueB, currentPath);
+                diffs.push(...arrayDiffs);
+            } else if (JSON.stringify(valueA) !== JSON.stringify(valueB)) {
+                diffs.push({
+                    type: 'modified',
+                    path: currentPath,
+                    oldValue: valueA,
+                    newValue: valueB
+                });
+            }
+        }
+        
+        return diffs;
+    }
+
+    /**
+     * Compare two arrays and find differences
+     */
+    compareArrays(arrA, arrB, path) {
+        const diffs = [];
+        const maxLength = Math.max(arrA.length, arrB.length);
+        
+        for (let i = 0; i < maxLength; i++) {
+            const currentPath = `${path}[${i}]`;
+            const valueA = arrA[i];
+            const valueB = arrB[i];
+            
+            if (i >= arrA.length) {
+                diffs.push({
+                    type: 'added',
+                    path: currentPath,
+                    value: valueB
+                });
+            } else if (i >= arrB.length) {
+                diffs.push({
+                    type: 'removed',
+                    path: currentPath,
+                    value: valueA
+                });
+            } else if (this.getType(valueA) === 'object' && this.getType(valueB) === 'object') {
+                diffs.push(...this.findDifferences(valueA, valueB, currentPath));
+            } else if (this.getType(valueA) === 'array' && this.getType(valueB) === 'array') {
+                diffs.push(...this.compareArrays(valueA, valueB, currentPath));
+            } else if (JSON.stringify(valueA) !== JSON.stringify(valueB)) {
+                diffs.push({
+                    type: 'modified',
+                    path: currentPath,
+                    oldValue: valueA,
+                    newValue: valueB
+                });
+            }
+        }
+        
+        return diffs;
+    }
+
+    /**
+     * Get the type of a value
+     */
+    getType(value) {
+        if (value === null) return 'null';
+        if (Array.isArray(value)) return 'array';
+        return typeof value;
+    }
+
+    /**
+     * Display differences in the diff result area
+     */
+    displayDiff(differences) {
+        if (differences.length === 0) {
+            this.diffResult.innerHTML = `
+                <div class="diff-line diff-unchanged">
+                    ✓ No differences found - JSON objects are identical
+                </div>
+            `;
+            return;
+        }
+        
+        let html = `<div class="diff-path">Found ${differences.length} difference(s):</div>`;
+        
+        differences.forEach(diff => {
+            switch (diff.type) {
+                case 'added':
+                    html += `
+                        <div class="diff-line diff-added">
+                            + ${diff.path}: ${JSON.stringify(diff.value)}
+                        </div>
+                    `;
+                    break;
+                case 'removed':
+                    html += `
+                        <div class="diff-line diff-removed">
+                            - ${diff.path}: ${JSON.stringify(diff.value)}
+                        </div>
+                    `;
+                    break;
+                case 'modified':
+                    html += `
+                        <div class="diff-line diff-modified">
+                            ≠ ${diff.path}:
+                        </div>
+                        <div class="diff-line diff-removed" style="padding-left: 24px;">
+                            - ${JSON.stringify(diff.oldValue)}
+                        </div>
+                        <div class="diff-line diff-added" style="padding-left: 24px;">
+                            + ${JSON.stringify(diff.newValue)}
+                        </div>
+                    `;
+                    break;
+            }
+        });
+        
+        this.diffResult.innerHTML = html;
+    }
+
+    /**
+     * Swap JSON A and JSON B
+     */
+    swapJSON() {
+        const temp = this.jsonATextarea.value;
+        this.jsonATextarea.value = this.jsonBTextarea.value;
+        this.jsonBTextarea.value = temp;
+        this.updateCompareLineNumbers();
+        this.showNotification('Swapped JSON A and JSON B', 'success');
+    }
+
+    /**
+     * Clear JSON A
+     */
+    clearJsonA() {
+        this.jsonATextarea.value = '';
+        this.updateCompareLineNumbers();
+        this.showNotification('Cleared JSON A', 'success');
+    }
+
+    /**
+     * Clear JSON B
+     */
+    clearJsonB() {
+        this.jsonBTextarea.value = '';
+        this.updateCompareLineNumbers();
+        this.showNotification('Cleared JSON B', 'success');
+    }
+
+    /**
+     * Paste from clipboard to JSON A
+     */
+    async pasteJsonA() {
+        try {
+            const text = await navigator.clipboard.readText();
+            this.jsonATextarea.value = text;
+            this.updateCompareLineNumbers();
+            this.showNotification('Pasted to JSON A', 'success');
+        } catch (error) {
+            this.showNotification('Failed to paste from clipboard', 'error');
+        }
+    }
+
+    /**
+     * Paste from clipboard to JSON B
+     */
+    async pasteJsonB() {
+        try {
+            const text = await navigator.clipboard.readText();
+            this.jsonBTextarea.value = text;
+            this.updateCompareLineNumbers();
+            this.showNotification('Pasted to JSON B', 'success');
+        } catch (error) {
+            this.showNotification('Failed to paste from clipboard', 'error');
+        }
+    }
+
+    /**
+     * Copy diff result to clipboard
+     */
+    async copyDiff() {
+        try {
+            const text = this.diffResult.innerText;
+            await navigator.clipboard.writeText(text);
+            this.showNotification('Diff copied to clipboard!', 'success');
+        } catch (error) {
+            this.showNotification('Failed to copy diff', 'error');
+        }
+    }
+
+    /**
+     * Clear diff result
+     */
+    clearDiff() {
+        this.diffResult.innerHTML = `
+            <div class="diff-placeholder" data-i18n="diffPlaceholder">
+                Click "Compare" button to see differences between JSON A and JSON B
+            </div>
+        `;
+        this.allDifferences = [];
+        this.currentDiffIndex = -1;
+        this.diffLineMap = { jsonA: {}, jsonB: {} };
+        
+        // Hide diff summary
+        const diffSummary = document.getElementById('diffSummary');
+        if (diffSummary) {
+            diffSummary.classList.add('hidden');
+        }
+        
+        // Clear line highlighting
+        this.updateCompareLineNumbers();
+        
+        this.showNotification('Cleared diff result', 'success');
+    }
+
+    /**
+     * Build line map for highlighting differences
+     */
+    buildLineMap(jsonA, jsonB, formattedA, formattedB) {
+        this.diffLineMap = { jsonA: {}, jsonB: {} };
+        
+        // Parse formatted JSON line by line and map paths to line numbers
+        const linesA = formattedA.split('\n');
+        const linesB = formattedB.split('\n');
+        
+        // Simple heuristic: find lines containing keys from differences
+        this.allDifferences.forEach(diff => {
+            const pathParts = diff.path.split(/[\.\[\]]+/).filter(p => p);
+            const lastKey = pathParts[pathParts.length - 1];
+            
+            // Find line in JSON A
+            linesA.forEach((line, lineNum) => {
+                if (line.includes(`"${lastKey}"`) || line.includes(`${lastKey}:`)) {
+                    if (!this.diffLineMap.jsonA[lineNum]) {
+                        this.diffLineMap.jsonA[lineNum] = diff.type;
+                    }
+                }
+            });
+            
+            // Find line in JSON B
+            linesB.forEach((line, lineNum) => {
+                if (line.includes(`"${lastKey}"`) || line.includes(`${lastKey}:`)) {
+                    if (!this.diffLineMap.jsonB[lineNum]) {
+                        this.diffLineMap.jsonB[lineNum] = diff.type;
+                    }
+                }
+            });
+        });
+    }
+
+    /**
+     * Highlight lines with differences
+     */
+    highlightDiffLines() {
+        // Highlight JSON A
+        if (this.jsonALineNumbers) {
+            const lineElements = this.jsonALineNumbers.querySelectorAll('div');
+            lineElements.forEach((elem, index) => {
+                // Remove existing classes
+                elem.classList.remove('diff-line-added', 'diff-line-removed', 'diff-line-modified', 'diff-current');
+                
+                // Add diff class if this line has a difference
+                const diffType = this.diffLineMap.jsonA[index];
+                if (diffType) {
+                    elem.classList.add(`diff-line-${diffType}`);
+                }
+            });
+        }
+        
+        // Highlight JSON B
+        if (this.jsonBLineNumbers) {
+            const lineElements = this.jsonBLineNumbers.querySelectorAll('div');
+            lineElements.forEach((elem, index) => {
+                // Remove existing classes
+                elem.classList.remove('diff-line-added', 'diff-line-removed', 'diff-line-modified', 'diff-current');
+                
+                // Add diff class if this line has a difference
+                const diffType = this.diffLineMap.jsonB[index];
+                if (diffType) {
+                    elem.classList.add(`diff-line-${diffType}`);
+                }
+            });
+        }
+    }
+
+    /**
+     * Update diff summary with counts
+     */
+    updateDiffSummary() {
+        const added = this.allDifferences.filter(d => d.type === 'added').length;
+        const removed = this.allDifferences.filter(d => d.type === 'removed').length;
+        const modified = this.allDifferences.filter(d => d.type === 'modified').length;
+        const total = this.allDifferences.length;
+        
+        document.getElementById('diffCount').textContent = total === 1 ? '1 difference' : `${total} differences`;
+        document.getElementById('addedCount').textContent = added;
+        document.getElementById('removedCount').textContent = removed;
+        document.getElementById('modifiedCount').textContent = modified;
+        
+        // Update navigation buttons
+        this.updateNavigationButtons();
+    }
+
+    /**
+     * Update navigation button states
+     */
+    updateNavigationButtons() {
+        const prevBtn = document.getElementById('prevDiff');
+        const nextBtn = document.getElementById('nextDiff');
+        const positionSpan = document.getElementById('diffPosition');
+        
+        if (this.allDifferences.length === 0) {
+            if (prevBtn) prevBtn.disabled = true;
+            if (nextBtn) nextBtn.disabled = true;
+            if (positionSpan) positionSpan.textContent = '-/-';
+        } else {
+            if (prevBtn) prevBtn.disabled = this.currentDiffIndex <= 0;
+            if (nextBtn) nextBtn.disabled = this.currentDiffIndex >= this.allDifferences.length - 1;
+            
+            if (positionSpan && this.currentDiffIndex >= 0) {
+                positionSpan.textContent = `${this.currentDiffIndex + 1}/${this.allDifferences.length}`;
+            } else if (positionSpan) {
+                positionSpan.textContent = `-/${this.allDifferences.length}`;
+            }
+        }
+    }
+
+    /**
+     * Navigate to next/previous difference
+     */
+    navigateDiff(direction) {
+        if (this.allDifferences.length === 0) return;
+        
+        if (direction === 'next') {
+            this.currentDiffIndex = Math.min(this.currentDiffIndex + 1, this.allDifferences.length - 1);
+        } else {
+            this.currentDiffIndex = Math.max(this.currentDiffIndex - 1, 0);
+        }
+        
+        this.updateNavigationButtons();
+        this.scrollToDiff(this.currentDiffIndex);
+    }
+
+    /**
+     * Scroll to specific difference
+     */
+    scrollToDiff(index) {
+        if (index < 0 || index >= this.allDifferences.length) return;
+        
+        const diff = this.allDifferences[index];
+        
+        // Highlight current diff in detail panel
+        const diffLines = this.diffResult.querySelectorAll('.diff-line');
+        diffLines.forEach((line, idx) => {
+            if (idx === index) {
+                line.style.background = 'rgba(255, 193, 7, 0.2)';
+                line.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                line.style.background = '';
+            }
+        });
+        
+        // Update line number highlighting
+        this.highlightDiffLines();
+        
+        // Find and highlight current line in line numbers
+        const pathParts = diff.path.split(/[\.\[\]]+/).filter(p => p);
+        const lastKey = pathParts[pathParts.length - 1];
+        
+        // Scroll JSON textareas to relevant line
+        const linesA = this.jsonATextarea.value.split('\n');
+        const linesB = this.jsonBTextarea.value.split('\n');
+        
+        let targetLineA = linesA.findIndex(line => line.includes(`"${lastKey}"`));
+        let targetLineB = linesB.findIndex(line => line.includes(`"${lastKey}"`));
+        
+        if (targetLineA >= 0 && this.jsonATextarea) {
+            const lineHeight = 24; // approximate
+            this.jsonATextarea.scrollTop = targetLineA * lineHeight - 100;
+            
+            // Add visual highlight to line number
+            if (this.jsonALineNumbers) {
+                const lineElements = this.jsonALineNumbers.querySelectorAll('div');
+                lineElements.forEach((elem, idx) => {
+                    elem.classList.remove('diff-current');
+                    if (idx === targetLineA) {
+                        elem.classList.add('diff-current');
+                    }
+                });
+            }
+        }
+        
+        if (targetLineB >= 0 && this.jsonBTextarea) {
+            const lineHeight = 24;
+            this.jsonBTextarea.scrollTop = targetLineB * lineHeight - 100;
+            
+            // Add visual highlight to line number
+            if (this.jsonBLineNumbers) {
+                const lineElements = this.jsonBLineNumbers.querySelectorAll('div');
+                lineElements.forEach((elem, idx) => {
+                    elem.classList.remove('diff-current');
+                    if (idx === targetLineB) {
+                        elem.classList.add('diff-current');
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Toggle diff details panel
+     */
+    toggleDiffPanel() {
+        const panel = document.getElementById('diffDetailsPanel');
+        const toggleBtn = document.getElementById('toggleDiffPanel');
+        
+        if (panel) {
+            panel.classList.toggle('collapsed');
+            
+            if (toggleBtn) {
+                toggleBtn.classList.toggle('expanded');
+            }
+        }
+    }
+
+    /**
      * Handle keyboard shortcuts
      */
     handleKeyboardShortcuts(e) {
-        // Cmd/Ctrl + Enter: Compress
+        // Cmd/Ctrl + Enter: Compress or Compare depending on mode
         if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
             e.preventDefault();
-            this.compress();
+            if (this.currentMode === 'transform') {
+                this.compress();
+            } else if (this.currentMode === 'compare') {
+                this.compareJSON();
+            }
         }
         
         // Cmd/Ctrl + Shift + Enter: Decompress
@@ -744,7 +1633,11 @@ class JSONCompressor {
         // Cmd/Ctrl + K: Clear input
         if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
             e.preventDefault();
-            this.clearInput();
+            if (this.currentMode === 'transform') {
+                this.clearInput();
+            } else if (this.currentMode === 'compare') {
+                this.clearJsonA();
+            }
         }
     }
 }

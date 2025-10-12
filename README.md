@@ -4,10 +4,22 @@ A minimalistic web application for transforming, formatting, and converting JSON
 
 ## Features
 
+### Transform Mode
 - **JSON Compression**: Remove all unnecessary whitespace and minify JSON
 - **JSON Beautify**: Format JSON with proper indentation for readability
 - **JSON Sort**: Alphabetically sort all object keys recursively
+- **TypeScript Interface Generator**: Auto-generate TypeScript interfaces from JSON
 - **JSON to YAML**: Convert JSON to YAML format with proper structure
+- **JSON to XML**: Convert JSON to XML format with proper tag structure
+
+### Compare Mode
+- **JSON Diff/Compare**: Compare two JSON objects side-by-side and see detailed differences
+- **Visual Diff Display**: Color-coded differences (added, removed, modified)
+- **Deep Comparison**: Recursively compares nested objects and arrays
+- **Swap Functionality**: Quickly swap JSON A and JSON B
+
+### General Features
+- **Mode Switcher**: Seamlessly switch between Transform and Compare modes
 - **Dark Mode**: Toggle between light and dark themes with smooth transitions
 - **Multilingual Support**: Available in English, Spanish, Arabic, French, and German
 - **RTL Support**: Full right-to-left language support for Arabic
@@ -76,31 +88,72 @@ docker-compose down
    - JSON with alphabetically sorted keys appears in the right panel
    - Note: Arrays maintain their original order, only object keys are sorted
 
-4. **JSON to YAML**:
+4. **TypeScript Interface Generator**:
+   - Paste JSON in the left panel
+   - Click the "TypeScript" button
+   - TypeScript interfaces are automatically generated in the right panel
+   - Handles nested objects, arrays, and complex structures
+   - Perfect for rapid TypeScript development and type-safe API integration
+
+5. **JSON to YAML**:
    - Paste JSON in the left panel
    - Click the "YAML" button (code brackets icon)
    - Properly formatted YAML appears in the right panel
    - Perfect for Kubernetes configs, Docker Compose, and more
 
-5. **Dark Mode**:
+6. **JSON to XML**:
+   - Paste JSON in the left panel
+   - Click the "XML" button (document icon)
+   - Properly formatted XML appears in the right panel
+   - Handles nested objects, arrays, and special XML characters
+   - Perfect for API integrations, data exchange, and legacy systems
+
+7. **Dark Mode**:
    - Click the sun/moon icon in the header to toggle themes
    - Your preference is saved automatically
 
+### Compare Mode
+
+**NEW: JSON Diff/Compare functionality!**
+
+1. **Switch to Compare Mode**:
+   - Click the "Compare" button at the top (below the header)
+   - The layout will change to show two side-by-side JSON inputs
+
+2. **Compare JSON objects**:
+   - Paste your original JSON into the left panel (JSON A)
+   - Paste your modified JSON into the right panel (JSON B)
+   - Click the "Compare" button in the center
+   - View detailed differences in the output section below
+
+3. **Understanding the Diff**:
+   - **Green (+ Added)**: Fields that exist in JSON B but not in JSON A
+   - **Red (- Removed)**: Fields that exist in JSON A but not in JSON B
+   - **Blue (≠ Modified)**: Fields that have different values between the two JSONs
+   - Deep comparison works recursively through nested objects and arrays
+
+4. **Additional Compare Features**:
+   - **Swap**: Quickly exchange JSON A and JSON B contents
+   - **Paste**: Paste from clipboard to either JSON field
+   - **Clear**: Clear individual JSON fields or the diff output
+   - **Copy**: Copy the diff results to clipboard
+
 ### Keyboard Shortcuts
 
-- `Cmd/Ctrl + Enter` - Compress JSON
-- `Cmd/Ctrl + Shift + Enter` - Decompress JSON
+- `Cmd/Ctrl + Enter` - Compress JSON (Transform mode) / Compare JSON (Compare mode)
+- `Cmd/Ctrl + Shift + Enter` - Decompress JSON (Transform mode)
 - `Cmd/Ctrl + K` - Clear input
 
 ### Additional Features
 
+- **Mode Switcher**: Toggle between Transform and Compare modes (preference saved)
 - **Theme Toggle**: Switch between light and dark modes with the sun/moon button
 - **Language Selection**: Choose from 5 languages using the dropdown in the header
 - **Clear**: Remove all content from input or output
 - **Paste**: Paste from clipboard to input
 - **Copy**: Copy output to clipboard
-- **Download**: Save output as JSON file
-- **Sample**: Load example JSON for testing
+- **Download**: Save output as JSON file (Transform mode)
+- **Sample**: Load example JSON for testing (Transform mode)
 
 ### Supported Languages
 
@@ -111,7 +164,7 @@ The application is fully translated into:
 - **French** (fr)
 - **German** (de)
 
-The selected language and theme are automatically saved in your browser's localStorage.
+The selected language, theme, and mode are automatically saved in your browser's localStorage.
 
 ## Design Philosophy
 
@@ -152,13 +205,14 @@ Both themes use the golden ratio for spacing and maintain perfect contrast ratio
 
 ```
 json-playground/
-├── index.html          # Main HTML structure
-├── styles.css          # CSS with golden ratio styling
-├── languages.js        # Multilingual translations
-├── app.js              # JavaScript application logic
+├── index.html          # Main HTML structure with Transform and Compare modes
+├── styles.css          # CSS with golden ratio styling and dark mode
+├── languages.js        # Multilingual translations (EN, ES, AR, FR, DE)
+├── app.js              # JavaScript application logic with diff algorithm
 ├── nginx.conf          # Nginx configuration
 ├── Dockerfile          # Docker image definition
 ├── docker-compose.yml  # Docker Compose configuration
+├── future-releases.md  # Upcoming features roadmap
 └── README.md           # This file
 ```
 
@@ -241,6 +295,17 @@ docker-compose up -d --build
 ## License
 
 This project is open source and available for personal and commercial use.
+
+## Future Roadmap
+
+We have exciting features planned! Check out our [Future Releases Roadmap](future-releases.md) to see what's coming next and vote on features you'd like to see.
+
+**Upcoming highlights:**
+- JSON Diff/Compare
+- TypeScript Interface Generator
+- History/Recent Files
+- JSON Path Tester
+- And 36 more features!
 
 ## Contributing
 
