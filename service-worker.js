@@ -1,11 +1,18 @@
-const CACHE_NAME = 'json-playground-v1.0.0';
+const CACHE_VERSION = '1.0.1';
+const CACHE_NAME = `json-playground-v${CACHE_VERSION}`;
 const urlsToCache = [
   '/',
   '/index.html',
-  '/styles.css',
-  '/app.js',
-  '/languages.js',
+  `/styles.css?v=${CACHE_VERSION}`,
+  `/app.js?v=${CACHE_VERSION}`,
+  `/languages.js?v=${CACHE_VERSION}`,
+  `/prism.min.js?v=${CACHE_VERSION}`,
+  `/prism-json.min.js?v=${CACHE_VERSION}`,
+  `/prism-light.min.css?v=${CACHE_VERSION}`,
+  `/prism-dark.min.css?v=${CACHE_VERSION}`,
   '/manifest.json',
+  '/logo.svg',
+  '/favicon.svg',
   '/icon-192x192.png',
   '/icon-512x512.png'
 ];
