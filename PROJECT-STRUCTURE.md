@@ -1,6 +1,6 @@
 # Project Structure
 
-> **Clean, organized directory structure for MyJSON Tools**
+> **GitHub Pages compatible directory structure for MyJSON Tools**
 
 ---
 
@@ -8,87 +8,78 @@
 
 ```
 json-compressor/
-├── src/                          # Source code
-│   ├── js/                      # JavaScript files
-│   │   ├── app.js              # Main application logic
-│   │   └── languages.js        # i18n translations
-│   ├── css/                     # Stylesheets
-│   │   └── styles.css          # All CSS styling
-│   └── index.html               # Main HTML file
-│
-├── public/                       # Static assets & runtime files
-│   ├── assets/                  # Media assets
-│   │   ├── icons/              # PWA icons (*.png)
-│   │   └── images/             # Logo, favicon (*.svg)
-│   ├── libs/                    # Third-party libraries
-│   │   ├── prism/              # Prism.js syntax highlighting
-│   │   ├── jsonrepair.min.js   # JSON repair library
-│   │   └── tabular-json.min.js # Tabular-JSON library
-│   ├── manifest.json            # PWA manifest
-│   ├── service-worker.js        # Offline caching
-│   ├── sitemap.xml             # SEO sitemap
-│   ├── robots.txt              # Search engine directives
-│   └── browserconfig.xml        # Windows tile config
+├── index.html                    # Main HTML file (root for GitHub Pages)
+├── css/                          # Stylesheets
+│   └── styles.css               # All CSS styling
+├── js/                           # JavaScript files
+│   ├── app.js                   # Main application logic
+│   └── languages.js             # i18n translations
+├── libs/                         # Third-party libraries
+│   ├── prism/                   # Prism.js syntax highlighting
+│   ├── jsonrepair.min.js        # JSON repair library
+│   └── tabular-json.min.js      # Tabular-JSON library
+├── assets/                       # Media assets
+│   ├── icons/                   # PWA icons (*.png)
+│   └── images/                  # Logo, favicon (*.svg)
+├── manifest.json                 # PWA manifest
+├── service-worker.js             # Offline caching
+├── sitemap.xml                  # SEO sitemap
+├── robots.txt                   # Search engine directives
+├── browserconfig.xml             # Windows tile config
 │
 ├── docker/                       # Docker configuration
-│   ├── Dockerfile              # Container image definition
-│   ├── docker-compose.yml      # Orchestration config
-│   └── nginx.conf              # Web server config
+│   ├── Dockerfile               # Container image definition
+│   ├── docker-compose.yml       # Orchestration config
+│   └── nginx.conf               # Web server config
 │
 ├── docs/                         # Documentation
-│   ├── TABULAR-JSON.md         # Tabular-JSON feature docs
-│   ├── CACHE-BUSTING.md        # Cache busting strategy
-│   ├── seo-plan.md             # SEO implementation
-│   ├── domain-research.md      # Domain selection research
-│   └── future-releases.md      # Feature roadmap
+│   ├── TABULAR-JSON.md          # Tabular-JSON feature docs
+│   ├── CACHE-BUSTING.md         # Cache busting strategy
+│   ├── seo-plan.md              # SEO implementation
+│   ├── domain-research.md       # Domain selection research
+│   └── future-releases.md       # Feature roadmap
 │
 ├── scripts/                      # Build & utility scripts
-│   ├── bump-version.sh         # Version management
-│   └── generate-icons.sh       # PWA icon generator
+│   ├── bump-version.sh          # Version management
+│   └── generate-icons.sh        # PWA icon generator
 │
 ├── .gitignore                   # Git ignore rules
-├── .dockerignore               # Docker ignore rules
+├── .dockerignore                # Docker ignore rules
 ├── README.md                    # Project documentation
-├── CHANGELOG.md                # Version history
+├── CHANGELOG.md                 # Version history
 ├── LICENSE                      # MIT license
 ├── VERSION                      # Current version
-├── package.json                # npm dependencies
-└── package-lock.json           # Dependency lock file
+├── package.json                 # npm dependencies
+└── package-lock.json            # Dependency lock file
 ```
 
 ---
 
-## 🎯 Benefits
+## 🎯 Design Philosophy
 
-### Before (Messy Root)
-- ❌ 40+ files in root directory
-- ❌ Hard to find specific files
-- ❌ Mixed concerns (source, assets, config)
-- ❌ Difficult to scale
-- ❌ Confusing for new contributors
+### GitHub Pages Compatible
+- ✅ **`index.html` in root** - Required for GitHub Pages
+- ✅ **All web assets accessible** - CSS, JS, libs, assets in root
+- ✅ **Clean organization** - Docker, docs, scripts separated
+- ✅ **Direct deployment** - No build step needed
 
-### After (Clean Structure)
-- ✅ **Only 10 files** in root (configs only)
-- ✅ **Logical grouping** by purpose
-- ✅ **Clear separation** of concerns
-- ✅ **Easy to navigate** and find files
-- ✅ **Scalable** for future growth
-- ✅ **Professional** standard structure
+### Best of Both Worlds
+- ✅ **Web files in root** - GitHub Pages ready
+- ✅ **Infrastructure organized** - docker/, docs/, scripts/
+- ✅ **Scalable** - Easy to add new features
+- ✅ **Professional** - Clean separation
 
 ---
 
 ## 📁 Directory Purposes
 
-### `src/` - Source Code
-Application source files that get served to users.
-- HTML, CSS, JavaScript
-- The core of the application
-
-### `public/` - Static Assets
-Files that are served as-is without processing.
-- Assets (images, icons)
-- Third-party libraries
-- PWA files (manifest, service worker)
+### Root Level (Web Accessible)
+Files that need to be directly accessible via URL.
+- `index.html` - Main application
+- `css/`, `js/` - Source code
+- `libs/` - Third-party libraries
+- `assets/` - Images, icons
+- PWA files (manifest, service-worker)
 - SEO files (sitemap, robots.txt)
 
 ### `docker/` - Docker Configuration
@@ -111,45 +102,18 @@ Build and utility scripts.
 
 ---
 
-## 🔧 Path Updates
+## 🚀 Deployment
 
-All path references were updated in:
+### GitHub Pages
+```bash
+# Simply push to main branch
+git push origin main
 
-### Files Modified
-1. **`src/index.html`**
-   - CSS: `/css/styles.css`
-   - JS: `/js/app.js`, `/js/languages.js`
-   - Libs: `/libs/prism/*`, `/libs/jsonrepair.min.js`, etc.
-   - Icons: `/assets/icons/*`
-   - Images: `/assets/images/*`
+# GitHub Pages will automatically serve from root
+# Access at: https://yourusername.github.io/repo-name
+```
 
-2. **`docker/Dockerfile`**
-   - Updated all `COPY` commands
-   - Source files from `src/`
-   - Public files from `public/`
-   - Build context set to project root
-
-3. **`docker/docker-compose.yml`**
-   - Context: `..` (parent directory)
-   - Dockerfile: `docker/Dockerfile`
-
-4. **`public/service-worker.js`**
-   - Updated all cached URLs
-   - New paths for CSS, JS, libs, assets
-
-5. **`public/manifest.json`**
-   - Updated all icon paths
-   - Shortcut icon paths
-
-6. **`scripts/bump-version.sh`**
-   - Updated file paths for version bumping
-   - Docker command path
-
----
-
-## 🚀 How to Use
-
-### Development
+### Docker (Local/Production)
 ```bash
 # From project root
 cd docker
@@ -158,11 +122,9 @@ docker-compose up -d --build
 # Access at http://localhost:8090
 ```
 
-### Build for Production
-```bash
-cd docker
-docker-compose build
-```
+---
+
+## 🔧 Development Workflow
 
 ### Version Bump
 ```bash
@@ -175,44 +137,50 @@ bash scripts/bump-version.sh
 bash scripts/generate-icons.sh
 ```
 
----
+### Local Development
+```bash
+# Option 1: Docker
+cd docker && docker-compose up -d --build
 
-## 📦 Deployment
-
-When deploying, the Docker container:
-1. **Copies** files from `src/` and `public/`
-2. **Serves** them via Nginx
-3. **Maps** directory structure to web paths
-
-**Result:** URLs work correctly (e.g., `/css/styles.css` → `public/css/styles.css`)
-
----
-
-## 🔄 Git History
-
-All files were moved using `git mv`, preserving full history:
-- ✅ **Commit history** intact
-- ✅ **Blame** still works
-- ✅ **Diffs** traceable across moves
+# Option 2: Simple HTTP server
+python3 -m http.server 8090
+# or
+npx http-server -p 8090
+```
 
 ---
 
-## 📊 File Count
+## 📊 Benefits
 
-| Location | Before | After | Reduction |
-|----------|--------|-------|-----------|
-| Root directory | 40+ files | 10 files | **75%** |
-| Total project | Same | Same | Organized! |
-
----
-
-## 🎉 Result
-
-**Clean, professional, scalable directory structure** that follows industry best practices!
+✅ **GitHub Pages Ready** - `index.html` in root  
+✅ **No Build Required** - Direct deployment  
+✅ **Organized Infrastructure** - docker/, docs/, scripts/  
+✅ **Clean Root** - Only essential web files  
+✅ **Easy Navigation** - Logical structure  
+✅ **Git History Preserved** - All moves tracked  
 
 ---
 
-**Branch:** `feature/restructure`  
-**Status:** ✅ Built & Running  
-**Ready:** For testing and merge
+## 🔄 URLs Map Directly
 
+GitHub Pages serves files from root:
+- `/` → `index.html`
+- `/css/styles.css` → `css/styles.css`
+- `/js/app.js` → `js/app.js`
+- `/libs/prism/prism.min.js` → `libs/prism/prism.min.js`
+- `/assets/icons/icon-192x192.png` → `assets/icons/icon-192x192.png`
+
+**No path translation needed!** ✅
+
+---
+
+## 📝 Notes
+
+- **Docker still works** - Dockerfile updated to copy from new paths
+- **All features work** - No functionality changes
+- **Git history intact** - Used `git mv` for all moves
+- **Version 1.0.8** - Structure finalized
+
+---
+
+**Structure optimized for GitHub Pages deployment! 🚀**

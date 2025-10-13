@@ -29,17 +29,17 @@ echo -e "${YELLOW}Updating version from ${CURRENT_VERSION} to ${NEW_VERSION}...$
 echo "$NEW_VERSION" > VERSION
 
 # Update index.html
-sed -i.bak "s/?v=${CURRENT_VERSION}/?v=${NEW_VERSION}/g" src/index.html && rm src/index.html.bak
-echo -e "${GREEN}✓${NC} Updated src/index.html"
+sed -i.bak "s/?v=${CURRENT_VERSION}/?v=${NEW_VERSION}/g" index.html && rm index.html.bak
+echo -e "${GREEN}✓${NC} Updated index.html"
 
 # Update service-worker.js
-sed -i.bak "s/const CACHE_VERSION = '${CURRENT_VERSION}'/const CACHE_VERSION = '${NEW_VERSION}'/g" public/service-worker.js && rm public/service-worker.js.bak
-echo -e "${GREEN}✓${NC} Updated public/service-worker.js"
+sed -i.bak "s/const CACHE_VERSION = '${CURRENT_VERSION}'/const CACHE_VERSION = '${NEW_VERSION}'/g" service-worker.js && rm service-worker.js.bak
+echo -e "${GREEN}✓${NC} Updated service-worker.js"
 
 # Update manifest.json version if it exists
-if grep -q "\"version\"" public/manifest.json 2>/dev/null; then
-    sed -i.bak "s/\"version\": \"${CURRENT_VERSION}\"/\"version\": \"${NEW_VERSION}\"/g" public/manifest.json && rm public/manifest.json.bak
-    echo -e "${GREEN}✓${NC} Updated public/manifest.json"
+if grep -q "\"version\"" manifest.json 2>/dev/null; then
+    sed -i.bak "s/\"version\": \"${CURRENT_VERSION}\"/\"version\": \"${NEW_VERSION}\"/g" manifest.json && rm manifest.json.bak
+    echo -e "${GREEN}✓${NC} Updated manifest.json"
 fi
 
 echo ""
