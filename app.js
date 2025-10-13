@@ -45,8 +45,8 @@ class JSONCompressor {
             return;
         }
         
-        // Initialize i18n
-        this.currentLanguage = localStorage.getItem('json-compressor-language') || 'en';
+        // Initialize i18n with auto-detection
+        this.currentLanguage = localStorage.getItem('json-compressor-language') || this.detectBrowserLanguage();
         this.translations = typeof translations !== 'undefined' ? translations : {};
         
         // Initialize theme
@@ -347,6 +347,23 @@ class JSONCompressor {
     setFontSize(size) {
         this.currentFontSize = size;
         document.body.setAttribute('data-font-size', size);
+    }
+
+    /**
+     * Detect browser language and return supported language code
+     */
+    detectBrowserLanguage() {
+        // Get browser language (e.g., 'en-US', 'ar-SA', 'es-ES')
+        const browserLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+        
+        // Map browser language to supported languages
+        if (browserLang.startsWith('ar')) return 'ar'; // Arabic
+        if (browserLang.startsWith('es')) return 'es'; // Spanish
+        if (browserLang.startsWith('fr')) return 'fr'; // French
+        if (browserLang.startsWith('de')) return 'de'; // German
+        
+        // Default to English
+        return 'en';
     }
 
     /**
