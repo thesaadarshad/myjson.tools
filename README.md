@@ -70,8 +70,8 @@ Visit [https://myjson.tools](https://myjson.tools) and start using it immediatel
 
 ```bash
 # Clone the repository
-git clone https://github.com/thesaadarshad/dr-json.git
-cd dr-json
+git clone https://github.com/thesaadarshad/myjson.tools.git
+cd myjson.tools
 
 # Run with Docker Compose
 cd docker && docker-compose up
@@ -83,8 +83,8 @@ cd docker && docker-compose up
 
 ```bash
 # Clone the repository
-git clone https://github.com/thesaadarshad/dr-json.git
-cd dr-json
+git clone https://github.com/thesaadarshad/myjson.tools.git
+cd myjson.tools
 
 # Serve with any static server
 # Example with Python:
@@ -246,8 +246,8 @@ Contributions are welcome! Here's how you can help:
 
 ```bash
 # Clone the repository
-git clone https://github.com/thesaadarshad/dr-json.git
-cd dr-json
+git clone https://github.com/thesaadarshad/myjson.tools.git
+cd myjson.tools
 
 # Make changes to files
 
@@ -302,8 +302,8 @@ MIT License - see LICENSE file for details
 ## 📞 Support
 
 - **Website:** [https://myjson.tools](https://myjson.tools)
-- **Issues:** [GitHub Issues](https://github.com/thesaadarshad/dr-json/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/thesaadarshad/dr-json/discussions)
+- **Issues:** [GitHub Issues](https://github.com/thesaadarshad/myjson.tools/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/thesaadarshad/myjson.tools/discussions)
 
 ---
 
@@ -322,6 +322,6 @@ If you find MyJSON Tools useful, please:
 
 **Made with ❤️ for developers**
 
-[Website](https://myjson.tools) • [GitHub](https://github.com/thesaadarshad/dr-json) • [Report Bug](https://github.com/thesaadarshad/dr-json/issues)
+[Website](https://myjson.tools) • [GitHub](https://github.com/thesaadarshad/myjson.tools) • [Report Bug](https://github.com/thesaadarshad/myjson.tools/issues)
 
 </div>
