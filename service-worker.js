@@ -1,4 +1,4 @@
-const CACHE_VERSION = '1.0.3';
+const CACHE_VERSION = '1.0.4';
 const CACHE_NAME = `json-playground-v${CACHE_VERSION}`;
 const urlsToCache = [
   '/',
@@ -10,6 +10,7 @@ const urlsToCache = [
   `/prism-json.min.js?v=${CACHE_VERSION}`,
   `/prism-light.min.css?v=${CACHE_VERSION}`,
   `/prism-dark.min.css?v=${CACHE_VERSION}`,
+  `/jsonrepair.min.js?v=${CACHE_VERSION}`,
   '/manifest.json',
   '/logo.svg',
   '/favicon.svg',
