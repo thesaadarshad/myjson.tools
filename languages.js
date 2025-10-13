@@ -137,6 +137,7 @@ const translations = {
             
             // Footer
             footer: "Built with precision • Open Source • Privacy First",
+            supportDeveloper: "Buy Me A Coffee",
             
             // Tooltips
             tooltipClearInput: "Clear input",
@@ -318,6 +319,7 @@ const translations = {
             sampleLoaded: "JSON de ejemplo cargado",
             
             footer: "Construido con precisión • Código Abierto • Privacidad Primero",
+            supportDeveloper: "Invítame un Café",
             
             tooltipClearInput: "Limpiar entrada",
             tooltipPaste: "Pegar desde portapapeles",
@@ -498,6 +500,7 @@ const translations = {
             sampleLoaded: "تم تحميل مثال JSON",
             
             footer: "بُني بدقة • مفتوح المصدر • الخصوصية أولاً",
+            supportDeveloper: "قدم لي قهوة",
             
             tooltipClearInput: "مسح الإدخال",
             tooltipPaste: "لصق من الحافظة",
@@ -678,6 +681,7 @@ const translations = {
             sampleLoaded: "Exemple JSON chargé",
             
             footer: "Construit avec précision • Open Source • Confidentialité d'abord",
+            supportDeveloper: "Offrez-moi un café",
             
             tooltipClearInput: "Effacer l'entrée",
             tooltipPaste: "Coller depuis le presse-papiers",
@@ -858,6 +862,7 @@ const translations = {
             sampleLoaded: "Beispiel-JSON geladen",
             
             footer: "Mit Präzision gebaut • Open Source • Datenschutz zuerst",
+            supportDeveloper: "Spendier mir einen Kaffee",
             
             tooltipClearInput: "Eingabe löschen",
             tooltipPaste: "Aus Zwischenablage einfügen",

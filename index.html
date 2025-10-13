@@ -78,11 +78,11 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png">
     <link rel="apple-touch-icon" href="/icon-192x192.png">
     
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=1.0.1">
     
     <!-- Prism.js Syntax Highlighting -->
-    <link rel="stylesheet" href="prism-light.min.css" id="prism-theme-light">
-    <link rel="stylesheet" href="prism-dark.min.css" id="prism-theme-dark" disabled>
+    <link rel="stylesheet" href="prism-light.min.css?v=1.0.1" id="prism-theme-light">
+    <link rel="stylesheet" href="prism-dark.min.css?v=1.0.1" id="prism-theme-dark" disabled>
 </head>
 <body dir="ltr">
     <!-- Skip to main content for accessibility -->
@@ -720,8 +720,30 @@
             </div>
         </main>
 
+        <!-- Google AdSense Container -->
+        <div class="ad-container" id="ad-footer">
+            <span class="ad-label">Advertisement</span>
+            <div class="ad-placeholder">
+                <!-- Google AdSense code will go here -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            </div>
+        </div>
+
         <footer role="contentinfo">
-            <p data-i18n="footer">Built with precision • Open Source • Privacy First</p>
+            <div class="footer-content">
+                <p data-i18n="footer">Built with precision • Open Source • Privacy First</p>
+                <a href="https://ko-fi.com/thesaadarshad" target="_blank" rel="noopener" class="kofi-button">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 2.953-1.066 4.001.21 1.025-1.359 3.124-1.27 4.129-.21.947 1.01.615 2.745-.074 3.755h.498zm10.935-1.066c.104.922-.375 1.753-1.066 2.342-1.056.896-2.428 1.279-3.577 1.116.182-.922.273-1.868.273-2.844 0-.732-.104-1.453-.318-2.134.227-.318.502-.605.832-.828.648-.387 1.378-.4 2.064-.025.686.375 1.104.957 1.104 1.658a4.5 4.5 0 01-.312 1.715z"/>
+                    </svg>
+                    <span data-i18n="supportDeveloper">Buy Me A Coffee</span>
+                </a>
+            </div>
         </footer>
     </div>
 
@@ -758,11 +780,11 @@
     </div>
 
     <!-- Prism.js for syntax highlighting -->
-    <script src="prism.min.js"></script>
-    <script src="prism-json.min.js"></script>
+    <script src="prism.min.js?v=1.0.1"></script>
+    <script src="prism-json.min.js?v=1.0.1"></script>
     
-    <script src="languages.js"></script>
-    <script src="app.js"></script>
+    <script src="languages.js?v=1.0.1"></script>
+    <script src="app.js?v=1.0.1"></script>
     
     <!-- PWA Service Worker Registration -->
     <script>

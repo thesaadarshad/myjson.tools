@@ -364,6 +364,65 @@ header h1 {
     margin-right: auto;
 }
 
+/* Google AdSense Container */
+.ad-container {
+    margin: var(--space-xl) 0;
+    padding: var(--space-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+}
+
+.ad-label {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-light);
+    margin-bottom: var(--space-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+.ad-placeholder {
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg);
+    border-radius: var(--radius-sm);
+    position: relative;
+}
+
+/* Placeholder demo styling (remove when adding real ads) */
+.ad-placeholder::before {
+    content: '728 × 90 Leaderboard Ad';
+    color: var(--color-text-light);
+    font-size: var(--font-size-sm);
+    opacity: 0.5;
+}
+
+/* Hide placeholder text on mobile */
+@media (max-width: 768px) {
+    .ad-placeholder::before {
+        content: '320 × 50 Mobile Banner';
+    }
+}
+
+/* Responsive ad sizing */
+@media (max-width: 768px) {
+    .ad-container {
+        margin-bottom: var(--space-lg);
+        padding: var(--space-sm);
+    }
+    
+    .ad-placeholder {
+        min-height: 50px;
+    }
+}
+
 .mode-btn {
     flex: 1;
     display: flex;
@@ -1293,6 +1352,47 @@ footer {
     padding: var(--space-lg) 0 var(--space-md);
     color: var(--color-text-light);
     font-size: var(--font-size-sm);
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.footer-content p {
+    margin: 0;
+}
+
+.kofi-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    background: linear-gradient(135deg, #FF5E5B 0%, #FF3838 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    box-shadow: 0 2px 8px rgba(255, 62, 56, 0.3);
+}
+
+.kofi-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 62, 56, 0.4);
+}
+
+.kofi-button svg {
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        gap: var(--space-sm);
+    }
 }
 
 /* Notification system */
