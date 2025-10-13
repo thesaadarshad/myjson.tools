@@ -366,7 +366,7 @@ header h1 {
 
 /* Google AdSense Container */
 .ad-container {
-    margin: 0 auto var(--space-xl);
+    margin: var(--space-xl) auto;
     padding: var(--space-md);
     background: var(--color-surface);
     border: 1px solid var(--color-border);
