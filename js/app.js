@@ -349,6 +349,14 @@ class JSONCompressor {
     setFontSize(size) {
         this.currentFontSize = size;
         document.body.setAttribute('data-font-size', size);
+        
+        // Recalculate textarea heights and line numbers after font size change
+        // Use setTimeout to let the CSS changes take effect first
+        setTimeout(() => {
+            this.updateLineNumbers();
+            this.updateCompareLineNumbers();
+            this.updateOutputDisplay();
+        }, 0);
     }
 
     /**
@@ -1603,12 +1611,29 @@ class JSONCompressor {
         const text = textarea.value;
         const lines = text ? text.split('\n').length : 1;
         
-        // Generate line numbers
-        const lineNumbers = Array.from({ length: lines }, (_, i) => i + 1).join('\n');
-        lineNumbersElement.textContent = lineNumbers;
+        // Generate line numbers as individual div elements (same as Compare mode)
+        lineNumbersElement.innerHTML = Array.from({ length: lines }, (_, i) => `<div>${i + 1}</div>`).join('');
+        
+        // Auto-resize textarea and line numbers to fit content
+        this.autoResizeTextarea(textarea, lineNumbersElement);
         
         // Sync scroll position
         this.syncScroll(textarea, lineNumbersElement);
+    }
+
+    /**
+     * Auto-resize textarea and line numbers to fit content
+     */
+    autoResizeTextarea(textarea, lineNumbersElement) {
+        // Reset height to auto to get the correct scrollHeight
+        textarea.style.height = 'auto';
+        
+        // Set height to scrollHeight to fit all content
+        const newHeight = Math.max(500, textarea.scrollHeight);
+        textarea.style.height = newHeight + 'px';
+        
+        // Line numbers will grow naturally with their content
+        // No need to manually set height
     }
 
     /**
@@ -1641,6 +1666,9 @@ class JSONCompressor {
                 highlightedElement.querySelector('code').innerHTML = highlighted;
                 highlightedElement.style.display = 'block';
                 textarea.style.display = 'none';
+                
+                // Auto-resize highlighted element
+                this.autoResizeHighlightedElement(highlightedElement);
             } else {
                 // Empty output - show placeholder in textarea
                 highlightedElement.style.display = 'none';
@@ -1651,6 +1679,18 @@ class JSONCompressor {
             highlightedElement.style.display = 'none';
             textarea.style.display = 'block';
         }
+    }
+
+    /**
+     * Auto-resize highlighted element to fit content
+     */
+    autoResizeHighlightedElement(element) {
+        // Reset height to auto to get the correct scrollHeight
+        element.style.height = 'auto';
+        
+        // Set height to scrollHeight to fit all content
+        const newHeight = Math.max(500, element.scrollHeight);
+        element.style.height = newHeight + 'px';
     }
 
     /**
@@ -2364,10 +2404,16 @@ class JSONCompressor {
         if (this.jsonATextarea && this.jsonALineNumbers) {
             const lines = this.jsonATextarea.value.split('\n').length;
             this.jsonALineNumbers.innerHTML = Array.from({length: lines}, (_, i) => `<div>${i + 1}</div>`).join('');
+            
+            // Auto-resize textarea and line numbers to fit content
+            this.autoResizeTextarea(this.jsonATextarea, this.jsonALineNumbers);
         }
         if (this.jsonBTextarea && this.jsonBLineNumbers) {
             const lines = this.jsonBTextarea.value.split('\n').length;
             this.jsonBLineNumbers.innerHTML = Array.from({length: lines}, (_, i) => `<div>${i + 1}</div>`).join('');
+            
+            // Auto-resize textarea and line numbers to fit content
+            this.autoResizeTextarea(this.jsonBTextarea, this.jsonBLineNumbers);
         }
     }
 
