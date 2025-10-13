@@ -127,6 +127,7 @@ class JSONCompressor {
         addListener('compressBtn', 'click', () => this.compress());
         addListener('beautifyBtn', 'click', () => this.beautify());
         addListener('sortBtn', 'click', () => this.sortJSON());
+        addListener('repairBtn', 'click', () => this.repairJSON());
         addListener('typescriptBtn', 'click', () => this.convertToTypeScript());
         addListener('yamlBtn', 'click', () => this.convertToYAML());
         addListener('xmlBtn', 'click', () => this.convertToXML());
@@ -523,6 +524,40 @@ class JSONCompressor {
             this.showNotification(this.t('sortSuccess'), 'success');
         } catch (error) {
             this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
+        }
+    }
+
+    /**
+     * Repair invalid JSON using jsonrepair library
+     */
+    repairJSON() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToRepair'), 'error');
+            return;
+        }
+
+        try {
+            // Check if jsonrepair library is loaded
+            if (typeof JSONRepair === 'undefined' || typeof JSONRepair.jsonrepair !== 'function') {
+                this.showNotification('JSON Repair library not loaded', 'error');
+                return;
+            }
+
+            // Use jsonrepair to fix the JSON
+            const repaired = JSONRepair.jsonrepair(input);
+            
+            // Beautify the repaired JSON
+            const parsed = JSON.parse(repaired);
+            const output = JSON.stringify(parsed, null, 2);
+            
+            this.outputTextarea.value = output;
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('repairSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`${this.t('repairFailed')}: ${error.message}`, 'error');
         }
     }
 
