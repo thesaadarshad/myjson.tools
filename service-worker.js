@@ -11,6 +11,7 @@ const urlsToCache = [
   `/prism-light.min.css?v=${CACHE_VERSION}`,
   `/prism-dark.min.css?v=${CACHE_VERSION}`,
   `/jsonrepair.min.js?v=${CACHE_VERSION}`,
+  `/tabular-json.min.js?v=${CACHE_VERSION}`,
   '/manifest.json',
   '/logo.svg',
   '/favicon.svg',

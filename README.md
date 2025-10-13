@@ -29,6 +29,7 @@ Perfect for developers, data analysts, and anyone working with JSON data regular
 - **JSON to CSV** - Export JSON arrays to CSV
 - **JSON to XML** - Transform JSON to XML structure
 - **JSON to Query Params** - Convert between JSON and URL query strings
+- **JSON to Tabular** - Convert arrays to compact table notation (50-70% smaller)
 - **TypeScript Interface Generator** - Generate TypeScript types from JSON
 
 ### 🛠️ Data Tools
@@ -271,6 +272,18 @@ See `future-releases.md` for a comprehensive list of planned features.
 
 ---
 
+## 📚 Third-Party Libraries
+
+MyJSON Tools leverages these excellent open-source libraries:
+
+- **[jsonrepair](https://github.com/josdejong/jsonrepair)** by Jos de Jong - Repair invalid JSON automatically
+- **[Tabular-JSON](https://github.com/tabular-json/tabular-json)** by Jos de Jong - Convert JSON arrays to compact table format
+- **[Prism.js](https://prismjs.com/)** - Syntax highlighting for output
+
+All libraries are bundled and work offline. Full credit and thanks to their respective authors.
+
+---
+
 ## 📝 License
 
 MIT License - see LICENSE file for details
@@ -281,6 +294,7 @@ MIT License - see LICENSE file for details
 
 - Inspired by the need for a privacy-first JSON tool
 - Built with love for the developer community
+- Thanks to Jos de Jong for jsonrepair and Tabular-JSON libraries
 - Thanks to all contributors and users
 
 ---

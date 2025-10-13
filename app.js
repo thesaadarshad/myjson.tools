@@ -133,6 +133,7 @@ class JSONCompressor {
         addListener('xmlBtn', 'click', () => this.convertToXML());
         addListener('csvBtn', 'click', () => this.convertToCSV());
         addListener('queryParamsBtn', 'click', () => this.convertToQueryParams());
+        addListener('tabularBtn', 'click', () => this.convertToTabular());
         addListener('flattenBtn', 'click', () => this.flattenJSON());
         addListener('unflattenBtn', 'click', () => this.unflattenJSON());
         addListener('escapeBtn', 'click', () => this.escapeJSON());
@@ -1127,6 +1128,43 @@ class JSONCompressor {
             }
         }
         return value;
+    }
+
+    /**
+     * Convert JSON to Tabular-JSON format
+     * Converts arrays of objects to compact table notation
+     */
+    convertToTabular() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToConvert'), 'error');
+            return;
+        }
+
+        try {
+            // Check if TabularJSON library is loaded
+            if (typeof TabularJSON === 'undefined' || typeof TabularJSON.stringify !== 'function') {
+                this.showNotification('Tabular-JSON library not loaded', 'error');
+                return;
+            }
+
+            // Parse and validate JSON
+            const parsed = JSON.parse(input);
+            
+            // Convert to Tabular-JSON format
+            const tabular = TabularJSON.stringify(parsed, {
+                indentation: 2,
+                trailingCommas: false
+            });
+            
+            this.outputTextarea.value = tabular;
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('tabularSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`${this.t('tabularFailed')}: ${error.message}`, 'error');
+        }
     }
 
     /**

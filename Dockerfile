@@ -22,6 +22,9 @@ COPY prism-dark.min.css /usr/share/nginx/html/
 # Copy JSON Repair library
 COPY jsonrepair.min.js /usr/share/nginx/html/
 
+# Copy Tabular-JSON library
+COPY tabular-json.min.js /usr/share/nginx/html/
+
 # Copy PWA files
 COPY manifest.json /usr/share/nginx/html/
 COPY service-worker.js /usr/share/nginx/html/
