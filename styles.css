@@ -1720,13 +1720,20 @@ footer {
     .panel-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: var(--space-md);
+        gap: var(--space-sm);
+        padding: var(--space-md);
+    }
+    
+    .panel-title {
+        font-size: var(--font-size-base);
     }
     
     .actions {
         width: 100%;
-        justify-content: flex-end;
+        display: flex;
+        justify-content: flex-start;
         gap: var(--space-xs);
+        flex-wrap: wrap;
     }
     
     .btn-compact span {
