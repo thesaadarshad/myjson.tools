@@ -1,10 +1,11 @@
 services:
   json-playground:
-    build: .
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     container_name: json-playground
     ports:
       - "8090:80"
     restart: unless-stopped
     labels:
       - "description=JSON Playground Web Application"
-

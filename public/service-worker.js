@@ -3,20 +3,20 @@ const CACHE_NAME = `json-playground-v${CACHE_VERSION}`;
 const urlsToCache = [
   '/',
   '/index.html',
-  `/styles.css?v=${CACHE_VERSION}`,
-  `/app.js?v=${CACHE_VERSION}`,
-  `/languages.js?v=${CACHE_VERSION}`,
-  `/prism.min.js?v=${CACHE_VERSION}`,
-  `/prism-json.min.js?v=${CACHE_VERSION}`,
-  `/prism-light.min.css?v=${CACHE_VERSION}`,
-  `/prism-dark.min.css?v=${CACHE_VERSION}`,
-  `/jsonrepair.min.js?v=${CACHE_VERSION}`,
-  `/tabular-json.min.js?v=${CACHE_VERSION}`,
+  `/css/styles.css?v=${CACHE_VERSION}`,
+  `/js/app.js?v=${CACHE_VERSION}`,
+  `/js/languages.js?v=${CACHE_VERSION}`,
+  `/libs/prism/prism.min.js?v=${CACHE_VERSION}`,
+  `/libs/prism/prism-json.min.js?v=${CACHE_VERSION}`,
+  `/libs/prism/prism-light.min.css?v=${CACHE_VERSION}`,
+  `/libs/prism/prism-dark.min.css?v=${CACHE_VERSION}`,
+  `/libs/jsonrepair.min.js?v=${CACHE_VERSION}`,
+  `/libs/tabular-json.min.js?v=${CACHE_VERSION}`,
   '/manifest.json',
-  '/logo.svg',
-  '/favicon.svg',
-  '/icon-192x192.png',
-  '/icon-512x512.png'
+  '/assets/images/logo.svg',
+  '/assets/images/favicon.svg',
+  '/assets/icons/icon-192x192.png',
+  '/assets/icons/icon-512x512.png'
 ];
 
 // Install event - cache all static assets
