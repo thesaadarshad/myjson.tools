@@ -129,6 +129,8 @@ class JSONCompressor {
         addListener('sortBtn', 'click', () => this.sortJSON());
         addListener('repairBtn', 'click', () => this.repairJSON());
         addListener('typescriptBtn', 'click', () => this.convertToTypeScript());
+        addListener('graphqlBtn', 'click', () => this.convertToGraphQL());
+        addListener('protobufBtn', 'click', () => this.convertToProtobuf());
         addListener('yamlBtn', 'click', () => this.convertToYAML());
         addListener('xmlBtn', 'click', () => this.convertToXML());
         addListener('csvBtn', 'click', () => this.convertToCSV());
@@ -1567,6 +1569,288 @@ class JSONCompressor {
             return str.slice(0, -1);
         }
         return str;
+    }
+
+    /**
+     * Convert JSON to GraphQL Schema
+     */
+    convertToGraphQL() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToGraphql'), 'error');
+            return;
+        }
+
+        try {
+            // Parse JSON to validate
+            const parsed = JSON.parse(input);
+            
+            // Generate GraphQL schema
+            const schema = this.generateGraphQLSchema(parsed);
+            
+            this.outputTextarea.value = schema;
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('graphqlSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
+        }
+    }
+
+    /**
+     * Generate GraphQL schema from JSON object
+     */
+    generateGraphQLSchema(obj, typeName = 'Root') {
+        const types = new Map();
+        const seenTypes = new Set();
+        
+        // Analyze the object and collect all type definitions
+        this.analyzeAndCollectGraphQLTypes(obj, typeName, types, seenTypes);
+        
+        // Convert collected types to GraphQL schema
+        let schema = '# GraphQL Schema\n\n';
+        
+        for (const [name, fields] of types) {
+            schema += `type ${name} {\n`;
+            for (const [fieldName, fieldType] of Object.entries(fields)) {
+                schema += `  ${fieldName}: ${fieldType}\n`;
+            }
+            schema += `}\n\n`;
+        }
+        
+        return schema.trim();
+    }
+
+    /**
+     * Analyze JSON and collect GraphQL type definitions
+     */
+    analyzeAndCollectGraphQLTypes(obj, typeName, types, seenTypes) {
+        if (obj === null || typeof obj !== 'object') {
+            return this.getGraphQLType(obj);
+        }
+
+        if (Array.isArray(obj)) {
+            if (obj.length === 0) {
+                return '[String]'; // Default to String array for empty arrays
+            }
+            
+            // Analyze array elements
+            const firstNonNull = obj.find(item => item !== null);
+            if (firstNonNull) {
+                if (typeof firstNonNull === 'object' && !Array.isArray(firstNonNull)) {
+                    // Array of objects
+                    const itemTypeName = this.capitalize(this.singularize(typeName));
+                    this.analyzeAndCollectGraphQLTypes(firstNonNull, itemTypeName, types, seenTypes);
+                    return `[${itemTypeName}]`;
+                } else {
+                    // Array of primitives
+                    return `[${this.getGraphQLType(firstNonNull)}]`;
+                }
+            }
+            return '[String]';
+        }
+
+        // It's an object - create a type for it
+        if (!types.has(typeName)) {
+            const fields = {};
+            
+            for (const [key, value] of Object.entries(obj)) {
+                if (value === null) {
+                    fields[key] = 'String'; // Default to String for null values
+                } else if (Array.isArray(value)) {
+                    if (value.length === 0) {
+                        fields[key] = '[String]';
+                    } else {
+                        const firstNonNull = value.find(item => item !== null);
+                        if (firstNonNull && typeof firstNonNull === 'object' && !Array.isArray(firstNonNull)) {
+                            // Array of objects
+                            const childTypeName = this.capitalize(this.singularize(key));
+                            this.analyzeAndCollectGraphQLTypes(firstNonNull, childTypeName, types, seenTypes);
+                            fields[key] = `[${childTypeName}]`;
+                        } else {
+                            // Array of primitives
+                            fields[key] = `[${this.getGraphQLType(firstNonNull)}]`;
+                        }
+                    }
+                } else if (typeof value === 'object') {
+                    // Nested object
+                    const childTypeName = this.capitalize(key);
+                    this.analyzeAndCollectGraphQLTypes(value, childTypeName, types, seenTypes);
+                    fields[key] = childTypeName;
+                } else {
+                    // Primitive type
+                    fields[key] = this.getGraphQLType(value);
+                }
+            }
+            
+            types.set(typeName, fields);
+        }
+        
+        return typeName;
+    }
+
+    /**
+     * Get GraphQL type for a JavaScript value
+     */
+    getGraphQLType(value) {
+        if (value === null || value === undefined) return 'String';
+        if (Array.isArray(value)) return '[String]';
+        
+        const type = typeof value;
+        if (type === 'string') return 'String';
+        if (type === 'number') {
+            // Check if it's an integer or float
+            return Number.isInteger(value) ? 'Int' : 'Float';
+        }
+        if (type === 'boolean') return 'Boolean';
+        if (type === 'object') return 'JSON'; // Custom scalar for generic objects
+        
+        return 'String';
+    }
+
+    /**
+     * Convert JSON to Protocol Buffer (Protobuf) Schema
+     */
+    convertToProtobuf() {
+        const input = this.inputTextarea.value.trim();
+        
+        if (!input) {
+            this.showNotification(this.t('nothingToProtobuf'), 'error');
+            return;
+        }
+
+        try {
+            // Parse JSON to validate
+            const parsed = JSON.parse(input);
+            
+            // Generate Protobuf schema
+            const schema = this.generateProtobufSchema(parsed);
+            
+            this.outputTextarea.value = schema;
+            this.updateStats();
+            this.updateLineNumbers();
+            this.showNotification(this.t('protobufSuccess'), 'success');
+        } catch (error) {
+            this.showNotification(`${this.t('invalidJson')}: ${error.message}`, 'error');
+        }
+    }
+
+    /**
+     * Generate Protocol Buffer schema from JSON object
+     */
+    generateProtobufSchema(obj, messageName = 'Root') {
+        const messages = new Map();
+        const seenTypes = new Set();
+        
+        // Analyze the object and collect all message definitions
+        this.analyzeAndCollectProtobufMessages(obj, messageName, messages, seenTypes);
+        
+        // Convert collected messages to Protobuf schema
+        let schema = 'syntax = "proto3";\n\n';
+        
+        for (const [name, fields] of messages) {
+            schema += `message ${name} {\n`;
+            let fieldNumber = 1;
+            for (const [fieldName, fieldType] of Object.entries(fields)) {
+                schema += `  ${fieldType} ${fieldName} = ${fieldNumber};\n`;
+                fieldNumber++;
+            }
+            schema += `}\n\n`;
+        }
+        
+        return schema.trim();
+    }
+
+    /**
+     * Analyze JSON and collect Protobuf message definitions
+     */
+    analyzeAndCollectProtobufMessages(obj, messageName, messages, seenTypes) {
+        if (obj === null || typeof obj !== 'object') {
+            return this.getProtobufType(obj);
+        }
+
+        if (Array.isArray(obj)) {
+            if (obj.length === 0) {
+                return 'string'; // Default to string for empty arrays
+            }
+            
+            // Analyze array elements
+            const firstNonNull = obj.find(item => item !== null);
+            if (firstNonNull) {
+                if (typeof firstNonNull === 'object' && !Array.isArray(firstNonNull)) {
+                    // Array of objects
+                    const itemMessageName = this.capitalize(this.singularize(messageName));
+                    this.analyzeAndCollectProtobufMessages(firstNonNull, itemMessageName, messages, seenTypes);
+                    return `repeated ${itemMessageName}`;
+                } else {
+                    // Array of primitives
+                    return `repeated ${this.getProtobufType(firstNonNull)}`;
+                }
+            }
+            return 'repeated string';
+        }
+
+        // It's an object - create a message for it
+        if (!messages.has(messageName)) {
+            const fields = {};
+            
+            for (const [key, value] of Object.entries(obj)) {
+                if (value === null) {
+                    fields[key] = 'string'; // Default to string for null values
+                } else if (Array.isArray(value)) {
+                    if (value.length === 0) {
+                        fields[key] = 'repeated string';
+                    } else {
+                        const firstNonNull = value.find(item => item !== null);
+                        if (firstNonNull && typeof firstNonNull === 'object' && !Array.isArray(firstNonNull)) {
+                            // Array of objects
+                            const childMessageName = this.capitalize(this.singularize(key));
+                            this.analyzeAndCollectProtobufMessages(firstNonNull, childMessageName, messages, seenTypes);
+                            fields[key] = `repeated ${childMessageName}`;
+                        } else {
+                            // Array of primitives
+                            fields[key] = `repeated ${this.getProtobufType(firstNonNull)}`;
+                        }
+                    }
+                } else if (typeof value === 'object') {
+                    // Nested object
+                    const childMessageName = this.capitalize(key);
+                    this.analyzeAndCollectProtobufMessages(value, childMessageName, messages, seenTypes);
+                    fields[key] = childMessageName;
+                } else {
+                    // Primitive type
+                    fields[key] = this.getProtobufType(value);
+                }
+            }
+            
+            messages.set(messageName, fields);
+        }
+        
+        return messageName;
+    }
+
+    /**
+     * Get Protobuf type for a JavaScript value
+     */
+    getProtobufType(value) {
+        if (value === null || value === undefined) return 'string';
+        if (Array.isArray(value)) return 'repeated string';
+        
+        const type = typeof value;
+        if (type === 'string') return 'string';
+        if (type === 'number') {
+            // Check if it's an integer or float
+            if (Number.isInteger(value)) {
+                // Use int32 for most integers, int64 for large numbers
+                return (value > 2147483647 || value < -2147483648) ? 'int64' : 'int32';
+            }
+            return 'double'; // Use double for floating point
+        }
+        if (type === 'boolean') return 'bool';
+        if (type === 'object') return 'string'; // Serialize objects as strings
+        
+        return 'string';
     }
 
     /**
