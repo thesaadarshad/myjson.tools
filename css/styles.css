@@ -488,6 +488,7 @@ main {
     flex-direction: column;
     overflow: visible;
     transition: box-shadow var(--transition-normal);
+    max-width: 100%;
 }
 
 .panel:hover {
@@ -529,8 +530,10 @@ main {
 .textarea-wrapper {
     flex: 1;
     display: flex;
-    overflow: visible;
+    overflow-y: visible;
+    overflow-x: hidden;
     background: var(--color-surface);
+    max-width: 100%;
 }
 
 .line-numbers {
@@ -598,6 +601,12 @@ main {
     min-height: 500px;
     overflow: hidden;
     height: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 /* Font Size Classes */
@@ -658,6 +667,12 @@ body[data-font-size="large"] .line-numbers {
     border: none;
     min-height: 500px;
     height: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .json-highlighted code {
@@ -666,11 +681,26 @@ body[data-font-size="large"] .line-numbers {
     line-height: inherit;
     background: transparent !important;
     padding: 0 !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100%;
+    display: block;
 }
 
 /* Override Prism's default background to match our theme */
 .json-highlighted[class*="language-"] {
     background: var(--color-surface) !important;
+}
+
+/* Ensure Prism pre elements don't expand horizontally */
+.json-highlighted pre,
+.json-highlighted pre[class*="language-"] {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100%;
+    margin: 0;
 }
 
 .panel-footer {
