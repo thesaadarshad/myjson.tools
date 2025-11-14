@@ -155,6 +155,7 @@ class JSONCompressor {
         addListener('copyToInputBtn', 'click', () => this.copyOutputToInput());
         addListener('downloadBtn', 'click', () => this.downloadJSON());
         addListener('clearOutput', 'click', () => this.clearOutput());
+        addListener('fullscreenBtn', 'click', () => this.toggleFullscreen());
         
         // Compare mode actions
         addListener('compareBtn', 'click', () => this.compareJSON());
@@ -269,6 +270,36 @@ class JSONCompressor {
         
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
+        
+        // Fullscreen change listener to update icon
+        const fullscreenChangeEvents = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'];
+        fullscreenChangeEvents.forEach(eventName => {
+            document.addEventListener(eventName, () => this.updateFullscreenIcon());
+        });
+    }
+    
+    /**
+     * Update fullscreen button icon based on current state
+     */
+    updateFullscreenIcon() {
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        if (!fullscreenBtn) return;
+        
+        const fullscreenIcon = fullscreenBtn.querySelector('.fullscreen-icon');
+        const fullscreenExitIcon = fullscreenBtn.querySelector('.fullscreen-exit-icon');
+        
+        const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || 
+                               document.mozFullScreenElement || document.msFullscreenElement);
+        
+        if (fullscreenIcon && fullscreenExitIcon) {
+            if (isFullscreen) {
+                fullscreenIcon.style.display = 'none';
+                fullscreenExitIcon.style.display = 'block';
+            } else {
+                fullscreenIcon.style.display = 'block';
+                fullscreenExitIcon.style.display = 'none';
+            }
+        }
     }
 
     /**
@@ -2411,6 +2442,52 @@ class JSONCompressor {
         this.outputTextarea.value = '';
         this.updateStats();
         this.updateLineNumbers();
+    }
+
+    /**
+     * Toggle fullscreen mode for Result panel
+     */
+    async toggleFullscreen() {
+        const outputPanel = document.querySelector('.output-panel');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const fullscreenIcon = fullscreenBtn?.querySelector('.fullscreen-icon');
+        const fullscreenExitIcon = fullscreenBtn?.querySelector('.fullscreen-exit-icon');
+        
+        if (!outputPanel) return;
+        
+        try {
+            // Check if currently in fullscreen
+            if (document.fullscreenElement || document.webkitFullscreenElement || 
+                document.mozFullScreenElement || document.msFullscreenElement) {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    await document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    await document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    await document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    await document.msExitFullscreen();
+                }
+            } else {
+                // Enter fullscreen
+                if (outputPanel.requestFullscreen) {
+                    await outputPanel.requestFullscreen();
+                } else if (outputPanel.webkitRequestFullscreen) {
+                    await outputPanel.webkitRequestFullscreen();
+                } else if (outputPanel.mozRequestFullScreen) {
+                    await outputPanel.mozRequestFullScreen();
+                } else if (outputPanel.msRequestFullscreen) {
+                    await outputPanel.msRequestFullscreen();
+                }
+            }
+        } catch (error) {
+            // User denied fullscreen or browser doesn't support it
+            this.showNotification(this.t('fullscreenNotSupported') || 'Fullscreen not supported', 'error');
+        }
+        
+        // Update icon based on fullscreen state
+        // This will be handled by the fullscreenchange event listener
     }
 
     /**
