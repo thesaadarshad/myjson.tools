@@ -2685,6 +2685,16 @@ class JSONCompressor {
             }
         });
         
+        // Show/hide action bar
+        const actionBar = document.getElementById('actionBar');
+        if (actionBar) {
+            if (mode === 'transform') {
+                actionBar.classList.remove('hidden');
+            } else {
+                actionBar.classList.add('hidden');
+            }
+        }
+        
         // Show/hide mode content
         const transformMode = document.getElementById('transformMode');
         const compareMode = document.getElementById('compareMode');
@@ -2715,12 +2725,16 @@ class JSONCompressor {
      */
     initializeAccordion() {
         const groups = document.querySelectorAll('.button-group');
+        const actionBarButtons = document.getElementById('actionBarButtons');
+        let currentButtonsContainer = null;
         
         groups.forEach(group => {
             const label = group.querySelector('.group-label');
+            const buttons = group.querySelector('.group-buttons');
             
-            if (label) {
-                label.addEventListener('click', () => {
+            if (label && buttons && actionBarButtons) {
+                label.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     const isCollapsed = group.classList.contains('collapsed');
                     
                     if (isCollapsed) {
@@ -2734,6 +2748,30 @@ class JSONCompressor {
                         // Expand this group
                         group.classList.remove('collapsed');
                         
+                        // Move buttons to shared row (preserves event listeners)
+                        if (currentButtonsContainer && currentButtonsContainer !== buttons) {
+                            // Return previous buttons to their original group
+                            const prevGroup = currentButtonsContainer.closest('.button-group');
+                            if (prevGroup) {
+                                prevGroup.appendChild(currentButtonsContainer);
+                            }
+                        }
+                        
+                        // Move current buttons to shared container
+                        actionBarButtons.innerHTML = '';
+                        actionBarButtons.appendChild(buttons);
+                        currentButtonsContainer = buttons;
+                        actionBarButtons.classList.add('active');
+                        
+                        // Show buttons container
+                        buttons.style.display = 'flex';
+                        buttons.style.flexDirection = 'row';
+                        buttons.style.flexWrap = 'wrap';
+                        buttons.style.justifyContent = 'center';
+                        buttons.style.alignItems = 'center';
+                        buttons.style.gap = 'var(--space-sm)';
+                        buttons.style.padding = '0';
+                        
                         // Save expanded group to localStorage
                         const groupName = group.getAttribute('data-group');
                         if (groupName) {
@@ -2742,18 +2780,44 @@ class JSONCompressor {
                     } else {
                         // Collapse this group
                         group.classList.add('collapsed');
+                        actionBarButtons.classList.remove('active');
+                        
+                        // Return buttons to original group
+                        if (buttons && buttons.parentElement === actionBarButtons) {
+                            group.appendChild(buttons);
+                            buttons.style.display = 'none';
+                        }
+                        actionBarButtons.innerHTML = '';
+                        currentButtonsContainer = null;
                         localStorage.removeItem('json-playground-expanded-group');
                     }
                 });
             }
         });
         
+        // Don't close tabs when clicking outside - keep them open once selected
+        // User can click the same tab again to close, or click another tab to switch
+        
         // Restore previously expanded group
         const expandedGroup = localStorage.getItem('json-playground-expanded-group');
-        if (expandedGroup) {
+        if (expandedGroup && actionBarButtons) {
             const group = document.querySelector(`.button-group[data-group="${expandedGroup}"]`);
             if (group) {
                 group.classList.remove('collapsed');
+                const buttons = group.querySelector('.group-buttons');
+                if (buttons) {
+                    actionBarButtons.innerHTML = '';
+                    actionBarButtons.appendChild(buttons);
+                    currentButtonsContainer = buttons;
+                    buttons.style.display = 'flex';
+                    buttons.style.flexDirection = 'row';
+                    buttons.style.flexWrap = 'wrap';
+                    buttons.style.justifyContent = 'center';
+                    buttons.style.alignItems = 'center';
+                    buttons.style.gap = 'var(--space-sm)';
+                    buttons.style.padding = '0';
+                    actionBarButtons.classList.add('active');
+                }
             }
         }
     }
